@@ -1,0 +1,32 @@
+{
+  "Actor": {
+    "types": ["personagem", "desafio"],
+    "personagem": {
+      "xp": {
+        "value": 0
+      },
+      "fatos": [],
+      "reservas": {},
+      "anotacoes": "",
+      "aparencia": {
+        "background_url": "",
+        "cor_accent": ""
+      }
+    },
+    "desafio": {
+      "descricao": "",
+      "tipo": "",
+      "fatos": [],
+      "reservas": {},
+      "notas_arquiteto": ""
+    }
+  },
+  "Item": {
+    "types": ["fato"],
+    "fato": {
+      "categoria": "",
+      "descricao": "",
+      "obrigatorio": false
+    }
+  }
+}

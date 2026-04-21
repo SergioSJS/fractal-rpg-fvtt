@@ -1,0 +1,90 @@
+{
+  "FRACTAL": {
+    "SystemName": "Fractal RPG",
+    "Actor": {
+      "Personagem": "Personagem",
+      "Desafio": "Desafio"
+    },
+    "Sheet": {
+      "Personagem": "Ficha de Personagem",
+      "Desafio": "Ficha de Desafio",
+      "XP": "XP",
+      "Reservas": "Reservas",
+      "Fatos": "Fatos",
+      "Anotacoes": "Anotações"
+    },
+    "Fato": {
+      "Rompido": "Rompido",
+      "Predefinido": "Pré-definido",
+      "Placeholder": "Escreva o Fato...",
+      "AddBtn": "Adicionar Fato",
+      "RemoveBtn": "Remover Fato",
+      "RollBtn": "Rolar este Fato"
+    },
+    "Reserva": {
+      "Atual": "Atual",
+      "Total": "Total",
+      "Gatilho": "Gatilho",
+      "Consequencia": "Consequência",
+      "SemReservas": "Nenhuma reserva configurada."
+    },
+    "Roll": {
+      "Titulo": "Rolagem de Risco",
+      "Sucesso": "SUCESSO",
+      "Falha": "FALHA",
+      "Impulso": "IMPULSO",
+      "Ruptura": "RUPTURA",
+      "SemFatos": "(sem Fatos — sucesso apenas no 6)",
+      "Maior": "Maior",
+      "Vantagem": "Vantagem",
+      "XPGanho": "+1 XP pela Falha",
+      "FatosAplicaveis": "Fatos aplicáveis",
+      "Acao": "Descreva a ação",
+      "Rolar": "Rolar Dados",
+      "DadosPreview": "Dados a rolar"
+    },
+    "Interludio": {
+      "Titulo": "Ações de Interlúdio",
+      "Evoluir": "Evoluir (3 XP) — novo Fato",
+      "Aprimorar": "Aprimorar (3 XP) — +1 em Reserva",
+      "Descansar": "Descansar — recuperar 1 ponto de Reserva",
+      "Mudar": "Mudar — reescrever um Fato",
+      "PrepararSe": "Preparar-se — +1 XP"
+    },
+    "Desafio": {
+      "Superado": "DESAFIO SUPERADO",
+      "NotasArquiteto": "Notas do Arquiteto"
+    },
+    "Settings": {
+      "ReservasMundo": {
+        "Nome": "Reservas do Mundo",
+        "Dica": "Define quais Reservas existem neste mundo. Reflete em todas as fichas."
+      },
+      "MenuFractal": {
+        "Nome": "Configurar Fractal RPG",
+        "Label": "Abrir Painel",
+        "Dica": "Configure Reservas de Personagens, Desafios e aparência das fichas."
+      },
+      "XPEpisodio": "XP por Episódio",
+      "XPArco": "XP por Arco",
+      "ReservasAtualizadas": "Reservas do mundo atualizadas.",
+      "CSS": {
+        "Nome": "CSS Customizado",
+        "Dica": "CSS injetado globalmente. Use as classes .fractal-* como seletores."
+      },
+      "Background": {
+        "Nome": "Background das Fichas",
+        "Dica": "URL ou caminho para imagem de fundo das fichas de personagem."
+      }
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "personagem": "Personagem",
+      "desafio": "Desafio"
+    },
+    "Item": {
+      "fato": "Fato"
+    }
+  }
+}

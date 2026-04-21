@@ -1,0 +1,44 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Update system.json
+        run: |
+          DOWNLOAD="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/fractal-rpg.zip"
+          jq --arg ver "${{ steps.version.outputs.VERSION }}" \
+             --arg dl "$DOWNLOAD" \
+             '.version = $ver | .download = $dl' \
+             system.json > system.tmp.json && mv system.tmp.json system.json
+
+      - name: Build release zip
+        run: |
+          zip -r fractal-rpg.zip \
+            module/ templates/ lang/ \
+            styles/fractal.css \
+            system.json template.json
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            fractal-rpg.zip
+            system.json
+          generate_release_notes: true
+          fail_on_unmatched_files: true

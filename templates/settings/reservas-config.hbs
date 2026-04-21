@@ -1,0 +1,138 @@
+<div class="fractal-cfg">
+
+  <nav class="cfg-tabs">
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="0">Personagens</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="1">Desafios</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="2">Aparência</button>
+  </nav>
+
+  <div class="cfg-content">
+
+    {{!-- PERSONAGENS --}}
+    <div class="cfg-tab-body" data-cfg-tab="personagens">
+      <p class="cfg-hint">Reservas visíveis nas fichas de personagem. Recomendado: 2–4. Gatilho = quando perde; Consequência = ao zerar.</p>
+      <div class="preset-bar">
+        <span>Pré-configuração:</span>
+        <select class="preset-select" data-target="reservasPersonagem">
+          <option value="">— Escolher —</option>
+          <option value="fantasia">⚔️ Fantasia Medieval</option>
+          <option value="scifi">🚀 Ficção Científica</option>
+          <option value="horror">👁️ Horror</option>
+          <option value="generico">🎲 Genérico</option>
+        </select>
+      </div>
+      <div class="reservas-header">
+        <span class="col-nome">Nome</span>
+        <span class="col-num">Inic.</span>
+        <span class="col-num">Máx.</span>
+        <span class="col-texto">Gatilho</span>
+        <span class="col-texto">Consequência</span>
+        <span style="width:28px"></span>
+      </div>
+      <div class="reservas-list" data-target="reservasPersonagem">
+        {{#each reservasPersonagem as |r|}}
+          <div class="reserva-row">
+            <input type="hidden" data-field="id"          value="{{r.id}}" />
+            <input type="text"   data-field="nome"         value="{{r.nome}}"                  placeholder="Nome"         class="col-nome" />
+            <input type="number" data-field="vinicial"     value="{{r.valor_inicial}}"          min="1" max="6"            class="col-num"  />
+            <input type="number" data-field="vmax"         value="{{r.valor_maximo_permitido}}" min="1" max="10"           class="col-num"  />
+            <input type="text"   data-field="gatilho"      value="{{r.gatilho}}"               placeholder="Gatilho"      class="col-texto"/>
+            <input type="text"   data-field="consequencia" value="{{r.consequencia}}"           placeholder="Consequência" class="col-texto"/>
+            <button type="button" class="btn-remove-row" data-action="removeReserva" title="Remover">×</button>
+          </div>
+        {{/each}}
+      </div>
+      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasPersonagem">+ Adicionar Reserva</button>
+    </div>
+
+    {{!-- DESAFIOS --}}
+    <div class="cfg-tab-body" data-cfg-tab="desafios">
+      <p class="cfg-hint">Reservas das fichas de Desafio (criaturas, obstáculos).</p>
+      <div class="preset-bar">
+        <span>Pré-configuração:</span>
+        <select class="preset-select" data-target="reservasDesafio">
+          <option value="">— Escolher —</option>
+          <option value="fantasia">⚔️ Fantasia Medieval</option>
+          <option value="scifi">🚀 Ficção Científica</option>
+          <option value="horror">👁️ Horror</option>
+          <option value="generico">🎲 Genérico</option>
+        </select>
+      </div>
+      <div class="reservas-header">
+        <span class="col-nome">Nome</span>
+        <span class="col-num">Inic.</span>
+        <span class="col-num">Máx.</span>
+        <span class="col-texto">Gatilho</span>
+        <span class="col-texto">Consequência</span>
+        <span style="width:28px"></span>
+      </div>
+      <div class="reservas-list" data-target="reservasDesafio">
+        {{#each reservasDesafio as |r|}}
+          <div class="reserva-row">
+            <input type="hidden" data-field="id"          value="{{r.id}}" />
+            <input type="text"   data-field="nome"         value="{{r.nome}}"                  placeholder="Nome"         class="col-nome" />
+            <input type="number" data-field="vinicial"     value="{{r.valor_inicial}}"          min="1" max="6"            class="col-num"  />
+            <input type="number" data-field="vmax"         value="{{r.valor_maximo_permitido}}" min="1" max="10"           class="col-num"  />
+            <input type="text"   data-field="gatilho"      value="{{r.gatilho}}"               placeholder="Gatilho"      class="col-texto"/>
+            <input type="text"   data-field="consequencia" value="{{r.consequencia}}"           placeholder="Consequência" class="col-texto"/>
+            <button type="button" class="btn-remove-row" data-action="removeReserva" title="Remover">×</button>
+          </div>
+        {{/each}}
+      </div>
+      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasDesafio">+ Adicionar Reserva</button>
+    </div>
+
+    {{!-- APARÊNCIA --}}
+    <div class="cfg-tab-body" data-cfg-tab="aparencia">
+
+      <div class="cfg-field">
+        <label>Cor de destaque (accent)</label>
+        <div class="cor-row">
+          <input type="color" id="cor-picker" value="{{corAccent}}" />
+          <input type="text"  id="cor-text"   value="{{corAccent}}" placeholder="#8B0000" maxlength="7" style="width:90px;font-family:monospace" />
+          <span class="cfg-hint">Bordas de Fatos, títulos de Reservas e botões.</span>
+        </div>
+      </div>
+
+      <div class="cfg-field">
+        <label>Background das fichas de Personagem</label>
+        <input type="text" data-field="bgPersonagem" value="{{backgroundPersonagem}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg.jpg" />
+        <div class="opacity-row">
+          <label class="opacity-label">Opacidade:</label>
+          <input type="range" data-field="bgOpacidadePersonagem" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadePersonagem}}" />
+          <span class="opacity-val">{{bgOpacidadePersonagem}}</span>
+        </div>
+      </div>
+
+      <div class="cfg-field">
+        <label>Background das fichas de Desafio</label>
+        <input type="text" data-field="bgDesafio" value="{{backgroundDesafio}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg-desafio.jpg" />
+        <div class="opacity-row">
+          <label class="opacity-label">Opacidade:</label>
+          <input type="range" data-field="bgOpacidadeDesafio" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadeDesafio}}" />
+          <span class="opacity-val">{{bgOpacidadeDesafio}}</span>
+        </div>
+      </div>
+
+      <div class="cfg-field">
+        <div class="css-label-row">
+          <label>CSS Customizado</label>
+          <button type="button" class="btn-css-default" data-action="loadDefaultCss">↺ Carregar padrão</button>
+        </div>
+        <p class="cfg-hint css-instructions">
+          Escreva CSS puro aplicado sobre as fichas. Use as variáveis <code>:root</code> para mudar cores globalmente,
+          ou selecione elementos com <code>.fractal-sheet</code>, <code>.fractal-reserva-card</code>, <code>.fractal-fato</code>, etc.
+          O CSS é injetado em <code>&lt;style&gt;</code> no &lt;head&gt; ao salvar.
+        </p>
+        <textarea data-field="css" rows="16" class="css-area">{{cssCustomizado}}</textarea>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="cfg-footer">
+    <button type="button" data-action="closeConfig">Cancelar</button>
+    <button type="button" data-action="saveConfig"><i class="fas fa-save"></i> Salvar</button>
+  </footer>
+
+</div>

@@ -1,0 +1,25 @@
+name: Update Manifest on Master
+
+on:
+  release:
+    types:
+      - published
+
+permissions:
+  contents: write
+
+jobs:
+  update_manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: master
+
+      - name: Foundry Manifest Update
+        uses: foundryvtt-dcc/foundry-manifest-update-action@main
+        with:
+          actionToken: ${{ secrets.GITHUB_TOKEN }}
+          manifestFileName: system.json

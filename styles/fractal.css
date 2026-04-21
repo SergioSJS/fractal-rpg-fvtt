@@ -1,0 +1,770 @@
+/* ═══════════════════════════════════════════════════
+   Fractal RPG — Estilos
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --f-accent:       #8B0000;
+  --f-accent2:      #a00000;
+  --f-text:         #1a1a1a;
+  --f-text-muted:   #666;
+  --f-bg:           #f5f2ec;
+  --f-bg-section:   #eeeae2;
+  --f-bg-input:     #fff;
+  --f-border:       #c8c0b0;
+  --f-border-light: #ddd8cc;
+  --f-green:        #1b5e20;
+  --f-red-roll:     #b71c1c;
+  --f-orange:       #e65100;
+  --f-purple:       #6a1b9a;
+  --f-blue:         #1565c0;
+}
+
+/* ── Base da ficha ──────────────────────────────── */
+.fractal-sheet {
+  display: flex;
+  flex-direction: column;
+  background: var(--f-bg);
+  color: var(--f-text);
+  font-size: 13px;
+  font-family: inherit;
+  overflow-y: auto;
+  height: 100%;
+  position: relative;
+  --f-bg-img: none;
+  --f-bg-img-opacity: 0.25;
+}
+
+.fractal-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--f-bg-img);
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  opacity: var(--f-bg-img-opacity);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.fractal-sheet > * { position: relative; z-index: 1; }
+
+/* ── Cabeçalho ──────────────────────────────────── */
+.fractal-sheet .sheet-header {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  background: var(--f-accent);
+  color: #fff;
+  align-items: center;
+}
+
+.fractal-sheet .actor-img {
+  width: 68px;
+  height: 68px;
+  object-fit: cover;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.fractal-sheet .header-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.fractal-sheet .actor-name input {
+  width: 100%;
+  font-size: 22px;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  color: #fff;
+  padding: 0 2px 2px;
+}
+
+.fractal-sheet .actor-name input::placeholder { color: rgba(255,255,255,0.6); }
+.fractal-sheet .actor-name input:focus { outline: none; border-bottom-color: #fff; }
+
+.fractal-sheet .header-bottom {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fractal-xp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0,0,0,0.25);
+  border-radius: 4px;
+  padding: 2px 8px;
+}
+
+.fractal-xp label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,0.8);
+}
+
+.fractal-xp input {
+  width: 48px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  padding: 0;
+}
+
+.fractal-xp input:focus { outline: none; }
+
+.header-btns { display: flex; gap: 6px; margin-left: auto; }
+
+.btn-roll-icon {
+  font-size: 26px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+.fractal-sheet .btn-roll,
+.fractal-sheet .btn-interlude {
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 1px solid rgba(255,255,255,0.6);
+}
+
+.fractal-sheet .btn-roll {
+  background: #fff;
+  color: var(--f-accent);
+}
+
+.fractal-sheet .btn-roll:hover,
+.fractal-sheet .btn-roll.has-selection { background: #fff; box-shadow: 0 0 0 2px rgba(255,255,255,0.5); }
+
+.fractal-sheet .btn-interlude {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+}
+
+.fractal-sheet .btn-interlude:hover { background: rgba(255,255,255,0.28); }
+
+/* ── Seções ─────────────────────────────────────── */
+.fractal-sheet section {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--f-border-light);
+}
+
+.fractal-sheet .section-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--f-accent);
+  margin-bottom: 6px;
+}
+
+.fractal-sheet .fatos-hint {
+  font-size: 10px;
+  color: var(--f-blue);
+  background: #e3f2fd;
+  border-radius: 8px;
+  padding: 1px 6px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.fractal-sheet .add-fato-btn {
+  margin-left: auto;
+  padding: 2px 10px;
+  border: 1px solid var(--f-accent);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--f-accent);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.fractal-sheet .add-fato-btn:hover { background: var(--f-accent); color: #fff; }
+
+.fractal-sheet .empty-msg {
+  font-size: 11px;
+  color: var(--f-text-muted);
+  font-style: italic;
+  margin: 0;
+}
+
+/* ── Reservas ───────────────────────────────────── */
+.reservas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.fractal-reserva-card {
+  background: var(--f-bg-section);
+  border: 1px solid var(--f-border);
+  border-top: 3px solid var(--f-accent);
+  border-radius: 4px;
+  padding: 6px 8px;
+  min-width: 100px;
+}
+
+.reserva-nome {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--f-accent);
+  margin-bottom: 4px;
+}
+
+.fractal-reserva-tracker {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+
+.fractal-reserva-tracker .bubble {
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.1s;
+}
+
+.fractal-reserva-tracker .bubble:hover { transform: scale(1.3); }
+.fractal-reserva-tracker .bubble.filled { color: var(--f-green); }
+.fractal-reserva-tracker .bubble.empty  { color: var(--f-border); }
+
+.reserva-valor { font-size: 13px; color: var(--f-text-muted); margin-left: 4px; }
+
+.reserva-detalhe {
+  font-size: 12px;
+  color: var(--f-text-muted);
+  margin-top: 3px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+/* ── Fatos ──────────────────────────────────────── */
+.fatos-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.fractal-fato {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  background: var(--f-bg-input);
+  border: 1px solid var(--f-border-light);
+  border-left: 3px solid var(--f-border);
+  border-radius: 3px;
+}
+
+.fractal-fato:hover { border-left-color: var(--f-accent); }
+
+.fractal-fato.selected {
+  border-left-color: var(--f-blue);
+  background: #e8f0fe;
+}
+
+.fractal-fato.rompido {
+  border-left-color: var(--f-red-roll);
+  background: #fff5f5;
+  opacity: 0.7;
+}
+
+.fractal-fato.rompido .fato-texto {
+  text-decoration: line-through;
+  color: var(--f-red-roll);
+}
+
+.fato-sel-btn, .fato-roll-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 22px;
+  color: var(--f-border);
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+  padding: 0;
+  line-height: 1;
+}
+
+.fractal-fato.selected  .fato-sel-btn { color: var(--f-blue); }
+.fractal-fato.rompido   .fato-sel-btn { color: var(--f-red-roll); cursor: not-allowed; }
+.fato-sel-btn:hover:not(:disabled)    { color: var(--f-blue); }
+
+.fato-roll-btn:hover:not(:disabled)   { color: var(--f-accent); }
+.fato-roll-btn:disabled               { cursor: not-allowed; opacity: 0.3; }
+
+.fato-texto {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--f-text);
+  font-size: 13px;
+  min-width: 0;
+  padding: 1px 2px;
+}
+
+.fato-texto:focus { outline: none; background: #f0f4ff; border-radius: 2px; }
+
+.fato-romper-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  font-size: 20px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.fato-del-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #999;
+  font-size: 13px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+
+.fato-romper-btn:hover { color: var(--f-red-roll); }
+.fato-del-btn:hover    { color: var(--f-red-roll); }
+.fractal-fato.rompido .fato-romper-btn { color: var(--f-green); }
+
+/* ── Anotações ──────────────────────────────────── */
+.anotacoes-area {
+  width: 100%;
+  resize: vertical;
+  padding: 5px 7px;
+  border: 1px solid var(--f-border);
+  border-radius: 3px;
+  font-size: 12px;
+  background: var(--f-bg-input);
+  color: var(--f-text);
+  font-family: inherit;
+  min-height: 80px;
+}
+
+/* ── Chat: Rolagem de Risco ─────────────────────── */
+.fractal-chat-roll {
+  border-radius: 5px;
+  overflow: hidden;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.roll-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.fractal-chat-roll.sucesso .roll-banner { background: var(--f-green); }
+.fractal-chat-roll.falha   .roll-banner { background: var(--f-red-roll); }
+.fractal-chat-roll.impulso .roll-banner { background: var(--f-orange); }
+.fractal-chat-roll .result-label { font-size: 13px; letter-spacing: 0.04em; }
+.fractal-chat-roll .actor-name   { font-size: 12px; }
+
+.roll-body {
+  padding: 7px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #222;
+}
+
+.roll-acao { font-style: italic; color: #444; }
+
+.roll-dados {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.dado {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid #bbb;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 13px;
+  background: #f5f5f5;
+  color: #333;
+}
+
+.dado.max { border-color: var(--f-green); color: var(--f-green); background: #e8f5e9; }
+.dado.one { border-color: var(--f-purple); color: var(--f-purple); background: #f3e5f5; }
+
+.dado-sep   { color: #999; }
+.dado-maior { font-size: 11px; color: #666; }
+
+.roll-badges { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.roll-badge {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid;
+}
+
+.badge-impulso   { background: #fff3e0; color: var(--f-orange); border-color: #ffcc80; }
+.badge-ruptura   { background: #f3e5f5; color: var(--f-purple); border-color: #ce93d8; }
+.badge-xp        { background: #ffebee; color: var(--f-red-roll); border-color: #ef9a9a; }
+.badge-sem-fatos { background: #f5f5f5; color: #777; border-color: #e0e0e0; font-style: italic; font-weight: 400; }
+
+.ruptura-lista { font-size: 11px; color: var(--f-purple); }
+
+.roll-fatos {
+  font-size: 10px;
+  color: #999;
+  border-top: 1px solid #f0f0f0;
+  padding-top: 3px;
+}
+
+.fato-tag {
+  background: #f0f0f0;
+  border-radius: 3px;
+  padding: 0 4px;
+  margin: 0 2px;
+}
+
+/* ── Roll Dialog ────────────────────────────────── */
+.fractal-roll-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 2px;
+  font-size: 13px;
+  color: #1a1a1a;
+}
+
+.roll-field { display: flex; flex-direction: column; gap: 3px; }
+.roll-field > label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #555; }
+
+.roll-field input[type=text] {
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #fff;
+}
+
+.fatos-header { display: flex; justify-content: space-between; align-items: baseline; }
+.fatos-hint-small { font-size: 10px; color: #999; font-weight: 400; text-transform: none; letter-spacing: 0; }
+
+.fatos-checkboxes {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  max-height: 160px;
+  overflow-y: auto;
+  background: #fafafa;
+}
+
+.fato-check-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #1a1a1a;
+  background: transparent;
+}
+
+.fato-check-row:hover:not(.rompido) { background: #e8f0fe; }
+.fato-check-row.rompido  { opacity: 0.45; cursor: not-allowed; text-decoration: line-through; }
+.fato-check-row.selecionado { background: #e3f2fd; font-weight: 600; }
+.badge-rompido { font-size: 10px; color: #b71c1c; }
+.no-fatos { font-size: 11px; color: #999; font-style: italic; padding: 6px 8px; margin: 0; }
+
+.vantagem-row > label { font-size: 12px; font-weight: 400; text-transform: none; letter-spacing: 0; color: #333; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.vantagem-hint { font-size: 11px; color: #999; }
+
+.roll-preview-bar {
+  text-align: center;
+  padding: 5px 12px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--f-accent);
+  background: #fdf0f0;
+  border: 1px solid #f5c6c6;
+}
+
+.roll-preview-bar strong { font-size: 14px; }
+
+/* ── Painel de Configurações ─────────────────────── */
+.fractal-cfg {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-size: 13px;
+  color: #1a1a1a;
+  background: #f8f6f2;
+}
+
+.cfg-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px 0;
+  background: #fff;
+  border-bottom: 2px solid var(--f-accent);
+  flex-shrink: 0;
+}
+
+.cfg-tab-btn {
+  padding: 5px 14px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 3px 3px 0 0;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: -2px;
+}
+
+.cfg-tab-btn:hover     { color: var(--f-accent); }
+.cfg-tab-btn.tab-active { background: #f8f6f2; border-color: var(--f-accent); color: var(--f-accent); }
+
+.cfg-content { flex: 1; overflow-y: auto; }
+
+.cfg-tab-body { display: none !important; padding: 10px 12px; flex-direction: column; gap: 8px; }
+
+.cfg-hint { font-size: 11px; color: #777; font-style: italic; margin: 0; }
+
+.preset-bar { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #555; }
+.preset-bar select { padding: 2px 6px; font-size: 11px; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; background: #fff; color: #1a1a1a; }
+
+.reservas-header { display: flex; gap: 5px; font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: #aaa; padding: 0 2px; }
+.reservas-list { display: flex; flex-direction: column; gap: 4px; }
+
+.reserva-row { display: flex; gap: 5px; align-items: center; }
+.reserva-row input { padding: 4px 6px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; background: #fff; color: #1a1a1a; }
+.reserva-row input:focus { outline: none; border-color: var(--f-accent); }
+
+.col-nome  { flex: 2; min-width: 0; }
+.col-num   { width: 46px; flex-shrink: 0; }
+.col-texto { flex: 2.5; min-width: 0; }
+
+.btn-remove-row {
+  width: 24px; height: 24px; flex-shrink: 0;
+  background: #fff; border: 1px solid #ddd; border-radius: 3px;
+  color: #aaa; cursor: pointer; font-size: 14px; padding: 0;
+}
+
+.btn-remove-row:hover { border-color: #b71c1c; color: #b71c1c; }
+
+.btn-add-row {
+  align-self: flex-start;
+  padding: 4px 12px;
+  background: transparent;
+  border: 1px dashed var(--f-accent);
+  color: var(--f-accent);
+  border-radius: 3px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.btn-add-row:hover { background: #fff0f0; }
+
+.cfg-field { display: flex; flex-direction: column; gap: 4px; }
+.cfg-field > label { font-size: 12px; font-weight: 600; color: #444; }
+
+.css-label-row { display: flex; align-items: center; justify-content: space-between; }
+.css-label-row label { font-size: 12px; font-weight: 600; color: #444; }
+
+.btn-css-default {
+  padding: 2px 10px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  background: #fff;
+  color: #555;
+  font-size: 11px;
+  cursor: pointer;
+}
+.btn-css-default:hover { border-color: var(--f-accent); color: var(--f-accent); }
+
+.css-instructions {
+  font-style: normal;
+  line-height: 1.5;
+  color: #666;
+  font-size: 11px;
+  margin: 0;
+}
+.css-instructions code {
+  background: #ede9e0;
+  border-radius: 2px;
+  padding: 0 3px;
+  font-family: 'Menlo', 'Consolas', monospace;
+  font-size: 10px;
+}
+.cfg-field input[type=text] { padding: 5px 8px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; background: #fff; color: #1a1a1a; }
+.cfg-field input[type=text]:focus { outline: none; border-color: var(--f-accent); }
+
+.opacity-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+.opacity-label { font-size: 11px; color: #666; white-space: nowrap; }
+.opacity-slider { flex: 1; cursor: pointer; accent-color: var(--f-accent); }
+.opacity-val { font-size: 11px; font-family: monospace; color: #444; width: 32px; text-align: right; }
+
+.cor-row { display: flex; align-items: center; gap: 8px; }
+.cor-row input[type=color] { width: 36px; height: 28px; padding: 1px; border: 1px solid #ccc; border-radius: 3px; cursor: pointer; }
+.cor-row input[type=text]  { padding: 4px 7px; border: 1px solid #ccc; border-radius: 3px; }
+
+.css-area {
+  width: 100%; padding: 6px 8px;
+  border: 1px solid #ccc; border-radius: 3px;
+  font-size: 11px; font-family: 'Menlo', 'Consolas', monospace;
+  resize: vertical; background: #1e1e2e; color: #cdd6f4;
+}
+
+.cfg-footer {
+  display: flex; justify-content: flex-end; gap: 8px;
+  padding: 8px 12px; border-top: 1px solid #ddd;
+  background: #fff; flex-shrink: 0;
+}
+
+.cfg-footer button { padding: 5px 16px; border: 1px solid #ccc; border-radius: 3px; font-size: 12px; font-weight: 600; cursor: pointer; background: #f5f5f5; color: #333; }
+.cfg-footer [data-action="saveConfig"] { background: var(--f-accent); color: #fff; border-color: var(--f-accent); }
+.cfg-footer [data-action="saveConfig"]:hover { background: var(--f-accent2); }
+
+/* ── Desafio — Tipo e Badge ─────────────────────── */
+.desafio-tipo-input {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.9);
+  font-size: 13px;
+  padding: 1px 2px;
+  min-width: 0;
+  flex: 1;
+}
+.desafio-tipo-input::placeholder { color: rgba(255,255,255,0.5); }
+.desafio-tipo-input:focus { outline: none; border-bottom-color: #fff; }
+
+.superado-badge {
+  background: var(--f-green);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.05em;
+  flex-shrink: 0;
+}
+
+/* ── Desafio — Reservas Custom ──────────────────── */
+.reservas-custom-grid { margin-top: 4px; }
+
+.custom-reserva-card {
+  border-top-color: #5c6bc0;
+}
+
+.custom-reserva-header {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.reserva-nome-input {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 700;
+  color: #5c6bc0;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #c5cae9;
+  padding: 0 2px 1px;
+  min-width: 0;
+}
+.reserva-nome-input:focus { outline: none; border-bottom-color: #5c6bc0; }
+.reserva-nome-input::placeholder { color: #b0b8e8; font-weight: 400; }
+
+.reserva-gatilho-input,
+.reserva-consequencia-input {
+  width: 100%;
+  font-size: 11px;
+  color: var(--f-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--f-border-light);
+  padding: 1px 2px;
+  margin-top: 3px;
+}
+.reserva-gatilho-input:focus,
+.reserva-consequencia-input:focus { outline: none; border-bottom-color: var(--f-border); }
+.reserva-gatilho-input::placeholder,
+.reserva-consequencia-input::placeholder { color: #ccc; font-style: italic; }
+
+.reserva-total-input {
+  width: 36px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--f-border-light);
+  color: var(--f-text-muted);
+  font-size: 13px;
+  text-align: center;
+  padding: 0 2px;
+}
+.reserva-total-input:focus { outline: none; border-bottom-color: var(--f-accent); }
+
+.btn-remove-custom {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 18px;
+  padding: 0 2px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+.btn-remove-custom:hover { color: var(--f-red-roll); }

@@ -1,0 +1,51 @@
+<div class="fractal-chat-roll {{tipoResultado}} {{#if ehImpulso}}impulso{{/if}}">
+
+  <div class="roll-banner">
+    <span class="actor-name">{{actorName}}</span>
+    <span class="result-label">{{labelResultado}}</span>
+  </div>
+
+  <div class="roll-body">
+
+    {{#if acao}}
+      <div class="roll-acao">"{{acao}}"</div>
+    {{/if}}
+
+    <div class="roll-dados">
+      {{#each resultados as |r|}}
+        <span class="dado d6 {{#if (eq r 6)}}max{{/if}} {{#if (eq r 1)}}one{{/if}}">{{r}}</span>
+      {{/each}}
+      <span class="dado-sep">→</span>
+      <span class="dado-maior">maior: <strong>{{maior}}</strong></span>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+      {{#if semFatos}}
+        <span class="roll-badge badge-sem-fatos">Sem Fatos — sucesso só no 6</span>
+      {{/if}}
+      {{#if ehImpulso}}
+        <span class="roll-badge badge-impulso">⚡ Impulso</span>
+      {{/if}}
+      {{#if rupturas}}
+        <span class="roll-badge badge-ruptura">💥 {{rupturas}} Ruptura{{#if (gt rupturas 1)}}s{{/if}}</span>
+      {{/if}}
+      {{#if xpGanho}}
+        <span class="roll-badge badge-xp">+1 XP</span>
+      {{/if}}
+    </div>
+
+    {{#if fatosRompidos.length}}
+      <div class="ruptura-lista">
+        Rompeu: {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
+      </div>
+    {{/if}}
+
+    {{#if fatosNomes.length}}
+      <div class="roll-fatos">
+        Fatos:
+        {{#each fatosNomes}}<span class="fato-tag">{{this}}</span>{{/each}}
+      </div>
+    {{/if}}
+
+  </div>
+</div>

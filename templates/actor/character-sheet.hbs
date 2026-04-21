@@ -1,0 +1,105 @@
+<form class="fractal-sheet personagem flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="actor-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="header-fields">
+      <div class="actor-name">
+        <input type="text" name="name" value="{{actor.name}}" placeholder="Nome do Personagem" />
+      </div>
+      <div class="header-bottom">
+        <div class="fractal-xp">
+          <label>XP</label>
+          <input type="number" name="system.xp.value" value="{{system.xp.value}}" min="0" />
+        </div>
+        <div class="header-btns">
+          <button type="button" class="btn-interlude" data-action="openInterlude">🌙 Interlúdio</button>
+          <button type="button" class="btn-roll {{#if selectedCount}}has-selection{{/if}}" data-action="openRollDialog">
+            <span class="btn-roll-icon">⚄</span> Rolar{{#if selectedCount}} ({{selectedCount}} fato{{#if (gt selectedCount 1)}}s{{/if}}){{/if}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- RESERVAS --}}
+  <section class="fractal-reservas">
+    <div class="section-title">Reservas</div>
+    {{#if reservas.length}}
+      <div class="reservas-grid">
+        {{#each reservas as |res|}}
+          <div class="fractal-reserva-card">
+            <div class="reserva-nome">{{res.nome}}</div>
+            <div class="fractal-reserva-tracker">
+              {{#each res.tracker as |b|}}
+                {{#if b.filled}}
+                  <span class="bubble filled" data-action="decrementReserva" data-reserva-id="{{../id}}" title="Gastar">●</span>
+                {{else}}
+                  <span class="bubble empty"  data-action="incrementReserva" data-reserva-id="{{../id}}" title="Recuperar">○</span>
+                {{/if}}
+              {{/each}}
+              <span class="reserva-valor">{{res.atual}}/</span>
+              {{#if editable}}
+                <input type="number" class="reserva-total-input" data-reserva-id="{{res.id}}"
+                  value="{{res.total}}" min="1" max="10" title="Máximo da reserva" />
+              {{else}}
+                <span class="reserva-valor">{{res.total}}</span>
+              {{/if}}
+            </div>
+            {{#if res.gatilho}}
+              <div class="reserva-detalhe">✦ {{res.gatilho}}{{#if res.consequencia}} · {{res.consequencia}}{{/if}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    {{else}}
+      <p class="empty-msg">Sem reservas — configure em <em>Configurações do Sistema → Fractal RPG</em>.</p>
+    {{/if}}
+  </section>
+
+  {{!-- FATOS --}}
+  <section class="fractal-fatos">
+    <div class="section-title">
+      Fatos
+      {{#if selectedCount}}<span class="fatos-hint">{{selectedCount}} marcado{{#if (gt selectedCount 1)}}s{{/if}} para rolar</span>{{/if}}
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
+    </div>
+
+    {{#if system.fatos.length}}
+      <ul class="fatos-list">
+        {{#each system.fatos as |fato|}}
+          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}} {{#if fato.selected}}selected{{/if}}">
+
+            {{!-- Marcar para rolar (◎/◉) --}}
+            <button type="button" class="fato-sel-btn" data-action="toggleSelecao" data-id="{{fato.id}}"
+              title="{{#if fato.rompido}}Fato rompido{{else if fato.selected}}Desmarcar{{else}}Marcar para rolar{{/if}}"
+              {{#if fato.rompido}}disabled{{/if}}>{{#if fato.rompido}}💥{{else if fato.selected}}◉{{else}}◎{{/if}}</button>
+
+            {{!-- Texto do Fato --}}
+            <input type="text" data-fato-idx="{{@index}}" value="{{fato.texto}}"
+              placeholder="Escreva o Fato..." class="fato-texto" />
+
+            {{!-- Rolar só este fato --}}
+            <button type="button" class="fato-roll-btn" data-action="rollEsseFato" data-id="{{fato.id}}"
+              title="Rolar só este Fato" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
+
+            {{!-- Romper / Restaurar --}}
+            <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
+              title="{{#if fato.rompido}}Restaurar Fato{{else}}Romper Fato{{/if}}">
+              {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
+
+            <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="empty-msg">Nenhum Fato. Clique em + para adicionar.</p>
+    {{/if}}
+  </section>
+
+  {{!-- ANOTAÇÕES --}}
+  <section class="fractal-anotacoes">
+    <div class="section-title">Anotações</div>
+    <textarea name="system.anotacoes" rows="6" class="anotacoes-area" {{#unless editable}}disabled{{/unless}}>{{system.anotacoes}}</textarea>
+  </section>
+
+</form>

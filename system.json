@@ -1,0 +1,41 @@
+{
+  "id": "fractal-rpg",
+  "title": "Fractal RPG",
+  "description": "Adaptação não-oficial do sistema Fractal RPG para Foundry VTT v13+. Baseado no SRD v1.0.1 de Igor Téuri & Walter Licínio (CC BY 4.0).",
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "14"
+  },
+  "authors": [
+    {
+      "name": "Sérgio Sousa",
+      "url": "https://meioorc.com"
+    }
+  ],
+  "esmodules": [
+    "module/fractal.mjs"
+  ],
+  "styles": [
+    "styles/fractal.css"
+  ],
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "personagem": {},
+      "desafio": {}
+    },
+    "Item": {
+      "fato": {}
+    }
+  },
+  "url": "https://github.com/SergioSJS/fractal-rpg-fvtt",
+  "manifest": "https://github.com/SergioSJS/fractal-rpg-fvtt/releases/latest/download/system.json",
+  "download": "https://github.com/SergioSJS/fractal-rpg-fvtt/releases/latest/download/fractal-rpg.zip"
+}

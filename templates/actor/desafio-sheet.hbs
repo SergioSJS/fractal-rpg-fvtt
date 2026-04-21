@@ -1,0 +1,126 @@
+<form class="fractal-sheet desafio flexcol" autocomplete="off">
+
+  <header class="sheet-header">
+    <img class="actor-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
+    <div class="header-fields">
+      <div class="actor-name">
+        <input type="text" name="name" value="{{actor.name}}" placeholder="Nome do Desafio" />
+      </div>
+      <div class="header-bottom">
+        <input type="text" name="system.tipo" value="{{system.tipo}}" placeholder="Tipo (Criatura, Obstáculo...)" class="desafio-tipo-input" />
+        {{#if superado}}<span class="superado-badge">✓ SUPERADO</span>{{/if}}
+      </div>
+    </div>
+  </header>
+
+  {{!-- RESERVAS (world settings) --}}
+  <section class="fractal-reservas">
+    <div class="section-title">
+      Reservas
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addCustomReserva">+ Reserva</button>{{/if}}
+    </div>
+
+    {{#if reservas.length}}
+      <div class="reservas-grid">
+        {{#each reservas as |res|}}
+          <div class="fractal-reserva-card">
+            <div class="reserva-nome">{{res.nome}}</div>
+            <div class="fractal-reserva-tracker">
+              {{#each res.tracker as |bubble|}}
+                {{#if bubble.filled}}
+                  <span class="bubble filled" data-action="decrementReserva" data-reserva-id="{{../id}}" title="Gastar">●</span>
+                {{else}}
+                  <span class="bubble empty"  data-action="incrementReserva" data-reserva-id="{{../id}}" title="Recuperar">○</span>
+                {{/if}}
+              {{/each}}
+              <span class="reserva-valor">{{res.atual}}/{{res.total}}</span>
+            </div>
+            {{#if res.gatilho}}
+              <div class="reserva-detalhe">✦ {{res.gatilho}}{{#if res.consequencia}} · {{res.consequencia}}{{/if}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+
+    {{!-- RESERVAS CUSTOM --}}
+    {{#if reservasCustom.length}}
+      <div class="reservas-grid reservas-custom-grid">
+        {{#each reservasCustom as |res|}}
+          <div class="fractal-reserva-card custom-reserva-card">
+            {{#if ../editable}}
+              <div class="custom-reserva-header">
+                <input type="text" class="custom-reserva-field reserva-nome-input" data-custom-id="{{res.id}}" data-field="nome"
+                  value="{{res.nome}}" placeholder="Nome" />
+                <button type="button" class="btn-remove-custom" data-action="removeCustomReserva" data-custom-id="{{res.id}}" title="Remover">×</button>
+              </div>
+            {{else}}
+              <div class="reserva-nome">{{res.nome}}</div>
+            {{/if}}
+
+            <div class="fractal-reserva-tracker">
+              {{#each res.tracker as |bubble|}}
+                {{#if bubble.filled}}
+                  <span class="bubble filled" data-action="decrementCustom" data-custom-id="{{../id}}" title="Gastar">●</span>
+                {{else}}
+                  <span class="bubble empty"  data-action="incrementCustom" data-custom-id="{{../id}}" title="Recuperar">○</span>
+                {{/if}}
+              {{/each}}
+              <span class="reserva-valor">{{res.atual}}/</span>
+              {{#if ../editable}}
+                <input type="number" class="custom-reserva-field reserva-total-input" data-custom-id="{{res.id}}" data-field="total"
+                  value="{{res.total}}" min="1" max="10" title="Total máximo" />
+              {{else}}
+                <span class="reserva-valor">{{res.total}}</span>
+              {{/if}}
+            </div>
+
+            {{#if ../editable}}
+              <input type="text" class="custom-reserva-field reserva-gatilho-input" data-custom-id="{{res.id}}" data-field="gatilho"
+                value="{{res.gatilho}}" placeholder="Gatilho..." />
+            {{else if res.gatilho}}
+              <div class="reserva-detalhe">✦ {{res.gatilho}}{{#if res.consequencia}} · {{res.consequencia}}{{/if}}</div>
+            {{/if}}
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+
+    {{#unless reservas.length}}{{#unless reservasCustom.length}}
+      <p class="empty-msg">Sem reservas. Use + para adicionar ou configure em <em>Configurações → Fractal RPG → Desafios</em>.</p>
+    {{/unless}}{{/unless}}
+  </section>
+
+  {{!-- FATOS --}}
+  <section class="fractal-fatos">
+    <div class="section-title">
+      Fatos
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
+    </div>
+    {{#if system.fatos.length}}
+      <ul class="fatos-list">
+        {{#each system.fatos as |fato|}}
+          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}}">
+            <input type="text" data-fato-idx="{{@index}}" value="{{fato.texto}}"
+              placeholder="Fato do desafio..." class="fato-texto" />
+            <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
+              title="{{#if fato.rompido}}Restaurar{{else}}Romper{{/if}}">
+              {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
+            <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+          </li>
+        {{/each}}
+      </ul>
+    {{else}}
+      <p class="empty-msg">Nenhum Fato. Clique em + para adicionar.</p>
+    {{/if}}
+  </section>
+
+  {{!-- NOTAS DO ARQUITETO --}}
+  {{#if owner}}
+    <section class="fractal-anotacoes">
+      <div class="section-title">Notas do Arquiteto</div>
+      <textarea name="system.notas_arquiteto" rows="5" class="anotacoes-area" {{#unless editable}}disabled{{/unless}}>{{system.notas_arquiteto}}</textarea>
+    </section>
+  {{/if}}
+
+</form>
