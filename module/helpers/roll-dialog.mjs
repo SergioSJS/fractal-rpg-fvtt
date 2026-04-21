@@ -1,5 +1,5 @@
 import { rolagemDeRisco, aplicarRupturas } from "./roll.mjs";
-import { createRollMessage } from "./chat.mjs";
+import { createRollMessage, updateRollMessageRupturas } from "./chat.mjs";
 
 const { DialogV2 } = foundry.applications.api;
 
@@ -43,6 +43,7 @@ export async function openRollDialog(actor, selectedIds = [], onClose = null) {
 
   await DialogV2.wait({
     window:      { title: "Rolagem de Risco" },
+    position:    { width: 520 },
     content,
     rejectClose: false,
     render:      (_ev, app) => _setupPreview(app.element),
@@ -61,15 +62,19 @@ export async function openRollDialog(actor, selectedIds = [], onClose = null) {
 
           const resultado = await rolagemDeRisco(actor, fatosIds, vantagem);
 
-          // Ruptura: jogador escolhe quais Fatos romper
+          // 1. Postar resultado no chat imediatamente
+          const { msg, templateData } = await createRollMessage(actor, resultado, acao, fatosNomes);
+
+          // 2. Só depois abrir modal de ruptura
           if (resultado.rupturas > 0 && fatosIds.length > 0) {
             const usados = fatos.filter(f => fatosIds.includes(f.id) && !f.rompido);
             if (usados.length > 0) {
-              resultado.fatosRompidos = await _escolherRupturas(actor, usados, resultado.rupturas);
+              const fatosRompidos = await _escolherRupturas(actor, usados, resultado.rupturas);
+              // 3. Atualizar mensagem do chat com os fatos rompidos escolhidos
+              await updateRollMessageRupturas(msg, templateData, fatosRompidos);
             }
           }
 
-          await createRollMessage(actor, resultado, acao, fatosNomes);
           onClose?.();
         },
       },
@@ -123,6 +128,7 @@ async function _escolherRupturas(actor, fatosUsados, qtdRupturas) {
 
   await DialogV2.wait({
     window:      { title: "Ruptura" },
+    position:    { width: 520 },
     content,
     rejectClose: false,
     render:      (_ev, app) => {

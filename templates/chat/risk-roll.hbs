@@ -34,6 +34,9 @@
       {{/if}}
     </div>
 
+    {{#if rupturasPendentes}}
+      <div class="ruptura-pendente">⏳ Aguardando escolha de ruptura...</div>
+    {{/if}}
     {{#if fatosRompidos.length}}
       <div class="ruptura-lista">
         Rompeu: {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
