@@ -327,6 +327,32 @@
 .fato-roll-btn:hover:not(:disabled)   { color: var(--f-accent); }
 .fato-roll-btn:disabled               { cursor: not-allowed; opacity: 0.3; }
 
+.fato-conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.fato-tipo-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--f-accent);
+  opacity: 0.65;
+  line-height: 1;
+  padding-left: 2px;
+}
+
+.fractal-fato.predefinido {
+  border-left-color: var(--f-accent);
+  border-left-width: 3px;
+}
+
+.fractal-fato.predefinido .fato-tipo-label { opacity: 0.85; }
+
 .fato-texto {
   flex: 1;
   border: none;
@@ -335,6 +361,7 @@
   font-size: 13px;
   min-width: 0;
   padding: 1px 2px;
+  width: 100%;
 }
 
 .fato-texto:focus { outline: none; background: #f0f4ff; border-radius: 2px; }
@@ -612,6 +639,46 @@
 
 .btn-add-row:hover { background: #fff0f0; }
 
+.cfg-subsection {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.cfg-subsection-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #888;
+}
+
+.fato-padrao-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fato-padrao-row .col-tipo {
+  flex: 1;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  font-size: 12px;
+}
+
+.fato-padrao-row .col-obrig {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  color: #555;
+}
+
 .cfg-field { display: flex; flex-direction: column; gap: 4px; }
 .cfg-field > label { font-size: 12px; font-weight: 600; color: #444; }
 
@@ -821,7 +888,7 @@
   border-radius: 50%;
   flex-shrink: 0;
   background: conic-gradient(
-    var(--f-accent) 0deg calc(var(--filled) / var(--total) * 360deg),
+    var(--clock-color, var(--f-accent)) 0deg calc(var(--filled) / var(--total) * 360deg),
     #555 calc(var(--filled) / var(--total) * 360deg)
   );
   display: flex;

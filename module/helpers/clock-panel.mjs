@@ -11,6 +11,9 @@ class FractalClockPanel {
     for (const actor of game.actors) {
       if (!["desafio", "grupo"].includes(actor.type)) continue;
 
+      const accentKey   = actor.type === "grupo" ? "corAccentGrupo" : "corAccentDesafio";
+      const accentColor = game.settings.get?.("fractal-rpg", accentKey) ?? "#8B0000";
+
       // World reservas — desafio only
       if (actor.type === "desafio") {
         const defs     = game.settings.get?.("fractal-rpg", "reservasDesafio") ?? [];
@@ -27,6 +30,7 @@ class FractalClockPanel {
             atual:       vals.atual ?? 0,
             total:       vals.total ?? def.valor_maximo_permitido ?? 6,
             gatilho:     def.gatilho || "",
+            accentColor,
           });
         }
       }
@@ -43,6 +47,7 @@ class FractalClockPanel {
           atual:       r.atual,
           total:       r.total,
           gatilho:     r.gatilho || "",
+          accentColor,
         });
       }
     }

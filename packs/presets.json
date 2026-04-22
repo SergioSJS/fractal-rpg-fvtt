@@ -1,0 +1,105 @@
+{
+  "fantasia": {
+    "nome": "Fantasia Medieval",
+    "corAccent": "#8B0000",
+    "corAccentPersonagem": "#8B0000",
+    "corAccentDesafio": "#5c3317",
+    "corAccentGrupo": "#1a5c1a",
+    "cssCustomizado": ":root {\n  --f-accent:       #8B0000;\n  --f-accent2:      #a00000;\n  --f-bg:           #f5f2ec;\n  --f-bg-section:   #eeeae2;\n  --f-bg-input:     #ffffff;\n  --f-border:       #c8c0b0;\n  --f-border-light: #ddd8cc;\n  --f-green:        #1b5e20;\n}",
+    "reservasPersonagem": [
+      { "nome": "Vida",    "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Sofrer ferimentos",  "consequencia": "Incapacitado" },
+      { "nome": "Vontade", "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Usar magia",         "consequencia": "Exaustão Mágica" }
+    ],
+    "reservasDesafio": [
+      { "nome": "Resistência", "valor_inicial": 4, "valor_maximo_permitido": 8, "gatilho": "Ser atacado",        "consequencia": "Derrotado" },
+      { "nome": "Moral",       "valor_inicial": 2, "valor_maximo_permitido": 4, "gatilho": "Situações adversas", "consequencia": "Rende-se" }
+    ],
+    "fatosPersonagem": [
+      { "tipo": "Ancestralidade", "obrigatorio": true },
+      { "tipo": "Classe",         "obrigatorio": true },
+      { "tipo": "Motivação",      "obrigatorio": false }
+    ],
+    "fatosDesafio": [
+      { "tipo": "Natureza",  "obrigatorio": true },
+      { "tipo": "Fraqueza",  "obrigatorio": false }
+    ],
+    "fatosGrupo": [
+      { "tipo": "Objetivo do Grupo", "obrigatorio": true }
+    ]
+  },
+  "scifi": {
+    "nome": "Ficção Científica",
+    "corAccent": "#0d47a1",
+    "corAccentPersonagem": "#0d47a1",
+    "corAccentDesafio": "#7b1fa2",
+    "corAccentGrupo": "#00695c",
+    "cssCustomizado": ":root {\n  --f-accent:       #1565c0;\n  --f-accent2:      #1976d2;\n  --f-bg:           #0a0e1a;\n  --f-bg-section:   #111827;\n  --f-bg-input:     #1a2233;\n  --f-border:       #1e3a5f;\n  --f-border-light: #253a5f;\n  --f-text:         #c8d8f0;\n  --f-text-muted:   #8aaccc;\n  --f-green:        #00796b;\n  --f-red-roll:     #e53935;\n}",
+    "reservasPersonagem": [
+      { "nome": "Integridade", "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Dano físico",   "consequencia": "Sistema Crítico" },
+      { "nome": "Energia",     "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Usar poderes",  "consequencia": "Apagão" }
+    ],
+    "reservasDesafio": [
+      { "nome": "Sistemas",  "valor_inicial": 4, "valor_maximo_permitido": 8, "gatilho": "Dano",            "consequencia": "Inoperante" },
+      { "nome": "Blindagem", "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Impacto direto",  "consequencia": "Sem proteção" }
+    ],
+    "fatosPersonagem": [
+      { "tipo": "Espécie/Origem", "obrigatorio": true },
+      { "tipo": "Especialização", "obrigatorio": true },
+      { "tipo": "Afiliação",      "obrigatorio": false }
+    ],
+    "fatosDesafio": [
+      { "tipo": "Classe de ameaça", "obrigatorio": true },
+      { "tipo": "Vulnerabilidade",  "obrigatorio": false }
+    ],
+    "fatosGrupo": [
+      { "tipo": "Missão do Grupo", "obrigatorio": true }
+    ]
+  },
+  "horror": {
+    "nome": "Horror",
+    "corAccent": "#2d0a0a",
+    "corAccentPersonagem": "#4a0e0e",
+    "corAccentDesafio": "#2d1b33",
+    "corAccentGrupo": "#0d2b1f",
+    "cssCustomizado": ":root {\n  --f-accent:       #4a0e0e;\n  --f-accent2:      #6d1515;\n  --f-bg:           #1a1412;\n  --f-bg-section:   #221a18;\n  --f-bg-input:     #2a1f1c;\n  --f-border:       #3d2420;\n  --f-border-light: #3d2420;\n  --f-text:         #e8d8d0;\n  --f-text-muted:   #b8a090;\n  --f-green:        #3a6e3c;\n  --f-red-roll:     #c0392b;\n}",
+    "reservasPersonagem": [
+      { "nome": "Vida",      "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Ferimentos",         "consequencia": "Morte" },
+      { "nome": "Sanidade",  "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "Ver o além",         "consequencia": "Enlouquecer" },
+      { "nome": "Esperança", "valor_inicial": 2, "valor_maximo_permitido": 4, "gatilho": "Situações extremas", "consequencia": "Desespero Total" }
+    ],
+    "reservasDesafio": [
+      { "nome": "Presença", "valor_inicial": 5, "valor_maximo_permitido": 10, "gatilho": "Rituais de banimento", "consequencia": "Banido" },
+      { "nome": "Corpo",    "valor_inicial": 3, "valor_maximo_permitido": 6,  "gatilho": "Dano físico",          "consequencia": "Destruído" }
+    ],
+    "fatosPersonagem": [
+      { "tipo": "Trauma",   "obrigatorio": true },
+      { "tipo": "Conexão",  "obrigatorio": true },
+      { "tipo": "Segredo",  "obrigatorio": false }
+    ],
+    "fatosDesafio": [
+      { "tipo": "Natureza Oculta", "obrigatorio": true },
+      { "tipo": "Forma de Banir",  "obrigatorio": false }
+    ],
+    "fatosGrupo": [
+      { "tipo": "Laço que os une", "obrigatorio": true }
+    ]
+  },
+  "generico": {
+    "nome": "Genérico",
+    "corAccent": "#4a4a4a",
+    "corAccentPersonagem": "#4a4a4a",
+    "corAccentDesafio": "#614040",
+    "corAccentGrupo": "#406140",
+    "cssCustomizado": ":root {\n  --f-accent:       #4a4a4a;\n  --f-accent2:      #616161;\n  --f-bg:           #f5f5f5;\n  --f-bg-section:   #ebebeb;\n  --f-bg-input:     #ffffff;\n  --f-border:       #c0c0c0;\n  --f-border-light: #d5d5d5;\n}",
+    "reservasPersonagem": [
+      { "nome": "Vida",    "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "", "consequencia": "" },
+      { "nome": "Vontade", "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "", "consequencia": "" }
+    ],
+    "reservasDesafio": [
+      { "nome": "Resistência", "valor_inicial": 3, "valor_maximo_permitido": 6, "gatilho": "", "consequencia": "" }
+    ],
+    "fatosPersonagem": [],
+    "fatosDesafio": [],
+    "fatosGrupo": []
+  }
+}

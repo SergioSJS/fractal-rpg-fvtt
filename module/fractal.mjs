@@ -49,3 +49,14 @@ Hooks.on("updateActor", actor => {
   if (["desafio", "grupo"].includes(actor.type)) clockPanel.render();
 });
 
+Hooks.on("preCreateActor", (actor, data) => {
+  if (data.img && data.img !== "icons/svg/mystery-man.svg") return;
+  const defaults = {
+    personagem: "icons/svg/mystery-man.svg",
+    desafio:    "icons/svg/skull.svg",
+    grupo:      "icons/svg/village.svg",
+  };
+  const img = defaults[actor.type];
+  if (img) actor.updateSource({ img });
+});
+

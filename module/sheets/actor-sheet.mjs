@@ -39,10 +39,21 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
       return { ...def, ...vals, tracker };
     });
 
-    const fatos = this.actor.system.fatos.map(f => ({
-      ...f,
-      selected: this.#selectedFatos.has(f.id),
-    }));
+    const fatosDefs  = game.settings.get?.("fractal-rpg", "fatosPersonagem") ?? [];
+    const actorFatos = this.actor.system.fatos;
+
+    const predefinidos = fatosDefs.map(def => {
+      const existing = actorFatos.find(f => f.predefinido && f.tipo === def.tipo);
+      return existing
+        ? { ...existing, tipoLabel: def.tipo, obrigatorio: def.obrigatorio, selected: this.#selectedFatos.has(existing.id) }
+        : { id: null, texto: "", rompido: false, predefinido: true, tipo: def.tipo, tipoLabel: def.tipo, obrigatorio: def.obrigatorio, selected: false };
+    });
+
+    const fatosLivres = actorFatos
+      .filter(f => !f.predefinido)
+      .map(f => ({ ...f, selected: this.#selectedFatos.has(f.id) }));
+
+    const fatos = [...predefinidos, ...fatosLivres];
 
     return {
       actor:         this.document,
@@ -60,6 +71,15 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
     const sheet = this.element.querySelector(".fractal-sheet");
     if (sheet) applySheetAppearance(sheet, "personagem");
 
+    // Avatar click — abre FilePicker para trocar imagem do ator
+    if (this.isEditable) {
+      this.element.querySelector(".actor-img")?.addEventListener("click", () => {
+        new foundry.applications.apps.FilePicker.implementation({ type: "image", current: this.actor.img,
+          callback: async path => { await this.actor.update({ img: path }); },
+        }).browse();
+      });
+    }
+
     // Campos name= não submetem via submitOnChange neste setup — listeners manuais
     this.element.querySelector('input[name="name"]')?.addEventListener("change", async e => {
       await this.actor.update({ name: e.target.value });
@@ -71,15 +91,24 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
       await this.actor.update({ "system.anotacoes": e.target.value });
     });
 
-    // Salva texto dos fatos
-    this.element.querySelectorAll(".fato-texto[data-fato-idx]").forEach(input => {
+    // Salva texto dos fatos (predefinidos por tipo, livres por id)
+    this.element.querySelectorAll(".fato-texto").forEach(input => {
       input.addEventListener("change", async e => {
-        const idx  = parseInt(e.target.dataset.fatoIdx);
-        const fatos = foundry.utils.deepClone(this.actor.system.fatos);
-        if (fatos[idx] !== undefined) {
-          fatos[idx].texto = e.target.value;
-          await this.actor.update({ "system.fatos": fatos });
+        const tipo   = e.target.dataset.predefinidoTipo;
+        const fatoId = e.target.dataset.fatoId;
+        const fatos  = foundry.utils.deepClone(this.actor.system.fatos);
+        if (tipo) {
+          const existing = fatos.find(f => f.predefinido && f.tipo === tipo);
+          if (existing) {
+            existing.texto = e.target.value;
+          } else {
+            fatos.push({ id: foundry.utils.randomID(), texto: e.target.value, rompido: false, predefinido: true, tipo });
+          }
+        } else if (fatoId) {
+          const fato = fatos.find(f => f.id === fatoId);
+          if (fato) fato.texto = e.target.value;
         }
+        await this.actor.update({ "system.fatos": fatos });
       });
     });
 

@@ -43,9 +43,22 @@ export class FractalDesafioSheet extends api.HandlebarsApplicationMixin(sheets.A
       tracker: Array.from({ length: r.total }, (_, i) => ({ filled: i < r.atual })),
     }));
 
+    const fatosDefs  = game.settings.get?.("fractal-rpg", "fatosDesafio") ?? [];
+    const actorFatos = this.actor.system.fatos;
+
+    const predefinidos = fatosDefs.map(def => {
+      const existing = actorFatos.find(f => f.predefinido && f.tipo === def.tipo);
+      return existing
+        ? { ...existing, tipoLabel: def.tipo, obrigatorio: def.obrigatorio }
+        : { id: null, texto: "", rompido: false, predefinido: true, tipo: def.tipo, tipoLabel: def.tipo, obrigatorio: def.obrigatorio };
+    });
+
+    const fatos = [...predefinidos, ...actorFatos.filter(f => !f.predefinido)];
+
     return {
       actor:         this.document,
       system:        this.document.system,
+      fatos,
       editable:      this.isEditable,
       owner:         this.document.isOwner,
       reservas,
@@ -60,6 +73,15 @@ export class FractalDesafioSheet extends api.HandlebarsApplicationMixin(sheets.A
 
     const sheet = this.element.querySelector(".fractal-sheet");
     if (sheet) applySheetAppearance(sheet, "desafio");
+
+    // Avatar click
+    if (this.isEditable) {
+      this.element.querySelector(".actor-img")?.addEventListener("click", () => {
+        new foundry.applications.apps.FilePicker.implementation({ type: "image", current: this.actor.img,
+          callback: async path => { await this.actor.update({ img: path }); },
+        }).browse();
+      });
+    }
 
     // Campos name= — listeners manuais
     this.element.querySelector('input[name="name"]')?.addEventListener("change", async e => {
@@ -86,15 +108,24 @@ export class FractalDesafioSheet extends api.HandlebarsApplicationMixin(sheets.A
       });
     });
 
-    // Salva texto dos fatos
-    this.element.querySelectorAll(".fato-texto[data-fato-idx]").forEach(input => {
+    // Salva texto dos fatos (predefinidos por tipo, livres por id)
+    this.element.querySelectorAll(".fato-texto").forEach(input => {
       input.addEventListener("change", async e => {
-        const idx   = parseInt(e.target.dataset.fatoIdx);
-        const fatos = foundry.utils.deepClone(this.actor.system.fatos);
-        if (fatos[idx] !== undefined) {
-          fatos[idx].texto = e.target.value;
-          await this.actor.update({ "system.fatos": fatos });
+        const tipo   = e.target.dataset.predefinidoTipo;
+        const fatoId = e.target.dataset.fatoId;
+        const fatos  = foundry.utils.deepClone(this.actor.system.fatos);
+        if (tipo) {
+          const existing = fatos.find(f => f.predefinido && f.tipo === tipo);
+          if (existing) {
+            existing.texto = e.target.value;
+          } else {
+            fatos.push({ id: foundry.utils.randomID(), texto: e.target.value, rompido: false, predefinido: true, tipo });
+          }
+        } else if (fatoId) {
+          const fato = fatos.find(f => f.id === fatoId);
+          if (fato) fato.texto = e.target.value;
         }
+        await this.actor.update({ "system.fatos": fatos });
       });
     });
 

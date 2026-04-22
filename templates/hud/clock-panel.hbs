@@ -3,7 +3,8 @@
     <div class="fractal-clock-entry"
       data-actor-id="{{c.actorId}}"
       data-reserva-id="{{c.reservaId}}"
-      data-reserva-type="{{c.reservaType}}">
+      data-reserva-type="{{c.reservaType}}"
+      style="--clock-color: {{c.accentColor}}">
       <div class="clock-face" style="--filled:{{c.atual}};--total:{{c.total}}">
         <span class="clock-val">{{c.atual}}/{{c.total}}</span>
       </div>

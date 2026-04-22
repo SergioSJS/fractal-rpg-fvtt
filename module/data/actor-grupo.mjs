@@ -5,9 +5,11 @@ export class GrupoData extends foundry.abstract.TypeDataModel {
       descricao: new f.StringField({ initial: "" }),
       fatos: new f.ArrayField(
         new f.SchemaField({
-          id:      new f.StringField({ required: true, initial: () => foundry.utils.randomID() }),
-          texto:   new f.StringField({ initial: "" }),
-          rompido: new f.BooleanField({ initial: false }),
+          id:          new f.StringField({ required: true, initial: () => foundry.utils.randomID() }),
+          texto:       new f.StringField({ initial: "" }),
+          rompido:     new f.BooleanField({ initial: false }),
+          predefinido: new f.BooleanField({ initial: false }),
+          tipo:        new f.StringField({ initial: "" }),
         }),
         { initial: [] }
       ),

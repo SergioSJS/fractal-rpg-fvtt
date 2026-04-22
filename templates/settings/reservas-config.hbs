@@ -3,7 +3,8 @@
   <nav class="cfg-tabs">
     <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="0">Personagens</button>
     <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="1">Desafios</button>
-    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="2">Aparência</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="2">Grupos</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="3">Aparência</button>
   </nav>
 
   <div class="cfg-content">
@@ -13,12 +14,11 @@
       <p class="cfg-hint">Reservas visíveis nas fichas de personagem. Recomendado: 2–4. Gatilho = quando perde; Consequência = ao zerar.</p>
       <div class="preset-bar">
         <span>Pré-configuração:</span>
-        <select class="preset-select" data-target="reservasPersonagem">
+        <select class="preset-select" data-target="personagens">
           <option value="">— Escolher —</option>
-          <option value="fantasia">⚔️ Fantasia Medieval</option>
-          <option value="scifi">🚀 Ficção Científica</option>
-          <option value="horror">👁️ Horror</option>
-          <option value="generico">🎲 Genérico</option>
+          {{#each presetOpts as |p|}}
+            <option value="{{p.key}}">{{p.nome}}</option>
+          {{/each}}
         </select>
       </div>
       <div class="reservas-header">
@@ -43,6 +43,42 @@
         {{/each}}
       </div>
       <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasPersonagem">+ Adicionar Reserva</button>
+
+      <div class="cfg-subsection">
+        <div class="cfg-subsection-title">Fatos Padrão</div>
+        <p class="cfg-hint">Tipos de fato que sempre aparecem nas fichas de personagem. Fatos obrigatórios não podem ser removidos pelos jogadores.</p>
+        <div class="fatos-list" data-target="fatosPersonagem">
+          {{#each fatosPersonagem as |f|}}
+            <div class="fato-padrao-row">
+              <input type="hidden" data-field="id"   value="{{f.id}}" />
+              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Ancestralidade, Classe...)" class="col-tipo" />
+              <label class="col-obrig">
+                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
+              </label>
+              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
+            </div>
+          {{/each}}
+        </div>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosPersonagem">+ Adicionar Tipo de Fato</button>
+      </div>
+
+      <div class="cfg-field">
+        <label>Cor de destaque (Personagem)</label>
+        <div class="cor-row">
+          <input type="color" id="cor-picker" value="{{corAccent}}" />
+          <input type="text"  id="cor-text"   value="{{corAccent}}" placeholder="#8B0000" maxlength="7" style="width:90px;font-family:monospace" />
+        </div>
+      </div>
+
+      <div class="cfg-field">
+        <label>Background das fichas de Personagem</label>
+        <input type="text" data-field="bgPersonagem" value="{{backgroundPersonagem}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg.jpg" />
+        <div class="opacity-row">
+          <label class="opacity-label">Opacidade:</label>
+          <input type="range" data-field="bgOpacidadePersonagem" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadePersonagem}}" />
+          <span class="opacity-val">{{bgOpacidadePersonagem}}</span>
+        </div>
+      </div>
     </div>
 
     {{!-- DESAFIOS --}}
@@ -50,12 +86,11 @@
       <p class="cfg-hint">Reservas das fichas de Desafio (criaturas, obstáculos).</p>
       <div class="preset-bar">
         <span>Pré-configuração:</span>
-        <select class="preset-select" data-target="reservasDesafio">
+        <select class="preset-select" data-target="desafios">
           <option value="">— Escolher —</option>
-          <option value="fantasia">⚔️ Fantasia Medieval</option>
-          <option value="scifi">🚀 Ficção Científica</option>
-          <option value="horror">👁️ Horror</option>
-          <option value="generico">🎲 Genérico</option>
+          {{#each presetOpts as |p|}}
+            <option value="{{p.key}}">{{p.nome}}</option>
+          {{/each}}
         </select>
       </div>
       <div class="reservas-header">
@@ -80,27 +115,30 @@
         {{/each}}
       </div>
       <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasDesafio">+ Adicionar Reserva</button>
-    </div>
 
-    {{!-- APARÊNCIA --}}
-    <div class="cfg-tab-body" data-cfg-tab="aparencia">
-
-      <div class="cfg-field">
-        <label>Cor de destaque (accent)</label>
-        <div class="cor-row">
-          <input type="color" id="cor-picker" value="{{corAccent}}" />
-          <input type="text"  id="cor-text"   value="{{corAccent}}" placeholder="#8B0000" maxlength="7" style="width:90px;font-family:monospace" />
-          <span class="cfg-hint">Bordas de Fatos, títulos de Reservas e botões.</span>
+      <div class="cfg-subsection">
+        <div class="cfg-subsection-title">Fatos Padrão</div>
+        <p class="cfg-hint">Tipos de fato que sempre aparecem nas fichas de desafio.</p>
+        <div class="fatos-list" data-target="fatosDesafio">
+          {{#each fatosDesafio as |f|}}
+            <div class="fato-padrao-row">
+              <input type="hidden" data-field="id"   value="{{f.id}}" />
+              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Natureza, Fraqueza...)" class="col-tipo" />
+              <label class="col-obrig">
+                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
+              </label>
+              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
+            </div>
+          {{/each}}
         </div>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosDesafio">+ Adicionar Tipo de Fato</button>
       </div>
 
       <div class="cfg-field">
-        <label>Background das fichas de Personagem</label>
-        <input type="text" data-field="bgPersonagem" value="{{backgroundPersonagem}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg.jpg" />
-        <div class="opacity-row">
-          <label class="opacity-label">Opacidade:</label>
-          <input type="range" data-field="bgOpacidadePersonagem" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadePersonagem}}" />
-          <span class="opacity-val">{{bgOpacidadePersonagem}}</span>
+        <label>Cor de destaque (Desafio)</label>
+        <div class="cor-row">
+          <input type="color" id="cor-picker-desafio" value="{{corAccentDesafio}}" />
+          <input type="text"  id="cor-text-desafio"   value="{{corAccentDesafio}}" placeholder="#5c3317" maxlength="7" style="width:90px;font-family:monospace" />
         </div>
       </div>
 
@@ -113,6 +151,60 @@
           <span class="opacity-val">{{bgOpacidadeDesafio}}</span>
         </div>
       </div>
+    </div>
+
+    {{!-- GRUPOS --}}
+    <div class="cfg-tab-body" data-cfg-tab="grupos">
+      <p class="cfg-hint">Configurações das fichas de Grupo.</p>
+      <div class="preset-bar">
+        <span>Pré-configuração:</span>
+        <select class="preset-select" data-target="grupos">
+          <option value="">— Escolher —</option>
+          {{#each presetOpts as |p|}}
+            <option value="{{p.key}}">{{p.nome}}</option>
+          {{/each}}
+        </select>
+      </div>
+
+      <div class="cfg-subsection">
+        <div class="cfg-subsection-title">Fatos Padrão</div>
+        <p class="cfg-hint">Tipos de fato que sempre aparecem nas fichas de grupo.</p>
+        <div class="fatos-list" data-target="fatosGrupo">
+          {{#each fatosGrupo as |f|}}
+            <div class="fato-padrao-row">
+              <input type="hidden" data-field="id"   value="{{f.id}}" />
+              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Objetivo do Grupo...)" class="col-tipo" />
+              <label class="col-obrig">
+                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
+              </label>
+              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
+            </div>
+          {{/each}}
+        </div>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosGrupo">+ Adicionar Tipo de Fato</button>
+      </div>
+
+      <div class="cfg-field">
+        <label>Cor de destaque (Grupo)</label>
+        <div class="cor-row">
+          <input type="color" id="cor-picker-grupo" value="{{corAccentGrupo}}" />
+          <input type="text"  id="cor-text-grupo"   value="{{corAccentGrupo}}" placeholder="#0d5c2e" maxlength="7" style="width:90px;font-family:monospace" />
+        </div>
+      </div>
+
+      <div class="cfg-field">
+        <label>Background das fichas de Grupo</label>
+        <input type="text" data-field="bgGrupo" value="{{backgroundGrupo}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg-grupo.jpg" />
+        <div class="opacity-row">
+          <label class="opacity-label">Opacidade:</label>
+          <input type="range" data-field="bgOpacidadeGrupo" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadeGrupo}}" />
+          <span class="opacity-val">{{bgOpacidadeGrupo}}</span>
+        </div>
+      </div>
+    </div>
+
+    {{!-- APARÊNCIA --}}
+    <div class="cfg-tab-body" data-cfg-tab="aparencia">
 
       <div class="cfg-field">
         <div class="css-label-row">
@@ -124,7 +216,7 @@
           ou selecione elementos com <code>.fractal-sheet</code>, <code>.fractal-reserva-card</code>, <code>.fractal-fato</code>, etc.
           O CSS é injetado em <code>&lt;style&gt;</code> no &lt;head&gt; ao salvar.
         </p>
-        <textarea data-field="css" rows="16" class="css-area">{{cssCustomizado}}</textarea>
+        <textarea data-field="css" rows="14" class="css-area">{{cssCustomizado}}</textarea>
       </div>
 
     </div>

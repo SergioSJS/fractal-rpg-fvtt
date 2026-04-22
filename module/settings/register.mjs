@@ -17,6 +17,46 @@ export function registerSettings() {
     onChange: () => _reRenderSheetsByType("desafio"),
   });
 
+  game.settings.register("fractal-rpg", "fatosPersonagem", {
+    scope:   "world",
+    config:  false,
+    type:    Object,
+    default: [],
+    onChange: () => _reRenderSheetsByType("personagem"),
+  });
+
+  game.settings.register("fractal-rpg", "fatosDesafio", {
+    scope:   "world",
+    config:  false,
+    type:    Object,
+    default: [],
+    onChange: () => _reRenderSheetsByType("desafio"),
+  });
+
+  game.settings.register("fractal-rpg", "fatosGrupo", {
+    scope:   "world",
+    config:  false,
+    type:    Object,
+    default: [],
+    onChange: () => _reRenderSheetsByType("grupo"),
+  });
+
+  game.settings.register("fractal-rpg", "backgroundGrupo", {
+    scope:   "world",
+    config:  false,
+    type:    String,
+    default: "",
+    onChange: () => _reRenderSheetsByType("grupo"),
+  });
+
+  game.settings.register("fractal-rpg", "bgOpacidadeGrupo", {
+    scope:   "world",
+    config:  false,
+    type:    Number,
+    default: 0.25,
+    onChange: () => _reRenderSheetsByType("grupo"),
+  });
+
   game.settings.register("fractal-rpg", "cssCustomizado", {
     scope:   "world",
     config:  false,
@@ -63,6 +103,22 @@ export function registerSettings() {
     type:    String,
     default: "#8B0000",
     onChange: (cor) => applyAccentColor(cor),
+  });
+
+  game.settings.register("fractal-rpg", "corAccentDesafio", {
+    scope:   "world",
+    config:  false,
+    type:    String,
+    default: "#5c3317",
+    onChange: () => _reRenderSheetsByType("desafio"),
+  });
+
+  game.settings.register("fractal-rpg", "corAccentGrupo", {
+    scope:   "world",
+    config:  false,
+    type:    String,
+    default: "#0d5c2e",
+    onChange: () => _reRenderSheetsByType("grupo"),
   });
 
   game.settings.register("fractal-rpg", "xpEpisodio", {

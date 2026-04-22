@@ -11,6 +11,7 @@ export class PersonagemData extends foundry.abstract.TypeDataModel {
           texto:       new f.StringField({ required: false, initial: "" }),
           rompido:     new f.BooleanField({ initial: false }),
           predefinido: new f.BooleanField({ initial: false }),
+          tipo:        new f.StringField({ initial: "" }),
         }),
         { initial: [] }
       ),

@@ -72,16 +72,29 @@
       Fatos
       {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
     </div>
-    {{#if system.fatos.length}}
+    {{#if fatos.length}}
       <ul class="fatos-list">
-        {{#each system.fatos as |fato|}}
-          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}}">
-            <input type="text" data-fato-idx="{{@index}}" value="{{fato.texto}}"
-              placeholder="Fato do grupo..." class="fato-texto" />
-            <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-              title="{{#if fato.rompido}}Restaurar{{else}}Romper{{/if}}">
-              {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
-            <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+        {{#each fatos as |fato|}}
+          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}} {{#if fato.predefinido}}predefinido{{/if}}">
+            <div class="fato-conteudo">
+              {{#if fato.id}}
+                <input type="text" data-fato-id="{{fato.id}}" value="{{fato.texto}}"
+                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Fato do grupo...{{/if}}"
+                  class="fato-texto" />
+              {{else}}
+                <input type="text" data-predefinido-tipo="{{fato.tipoLabel}}" value="{{fato.texto}}"
+                  placeholder="{{fato.tipoLabel}}..." class="fato-texto" />
+              {{/if}}
+              {{#if fato.tipoLabel}}<span class="fato-tipo-label">{{fato.tipoLabel}}</span>{{/if}}
+            </div>
+            {{#if fato.id}}
+              <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
+                title="{{#if fato.rompido}}Restaurar{{else}}Romper{{/if}}">
+                {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
+              {{#unless fato.obrigatorio}}
+                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+              {{/unless}}
+            {{/if}}
           </li>
         {{/each}}
       </ul>

@@ -67,27 +67,37 @@
     {{#if system.fatos.length}}
       <ul class="fatos-list">
         {{#each system.fatos as |fato|}}
-          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}} {{#if fato.selected}}selected{{/if}}">
+          <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}} {{#if fato.selected}}selected{{/if}} {{#if fato.predefinido}}predefinido{{/if}}">
 
             {{!-- Marcar para rolar (◎/◉) --}}
             <button type="button" class="fato-sel-btn" data-action="toggleSelecao" data-id="{{fato.id}}"
               title="{{#if fato.rompido}}Fato rompido{{else if fato.selected}}Desmarcar{{else}}Marcar para rolar{{/if}}"
               {{#if fato.rompido}}disabled{{/if}}>{{#if fato.rompido}}💥{{else if fato.selected}}◉{{else}}◎{{/if}}</button>
 
-            {{!-- Texto do Fato --}}
-            <input type="text" data-fato-idx="{{@index}}" value="{{fato.texto}}"
-              placeholder="Escreva o Fato..." class="fato-texto" />
+            {{!-- Texto + Label de tipo --}}
+            <div class="fato-conteudo">
+              {{#if fato.id}}
+                <input type="text" data-fato-id="{{fato.id}}" value="{{fato.texto}}"
+                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Escreva o Fato...{{/if}}"
+                  class="fato-texto" />
+              {{else}}
+                <input type="text" data-predefinido-tipo="{{fato.tipoLabel}}" value="{{fato.texto}}"
+                  placeholder="{{fato.tipoLabel}}..." class="fato-texto" />
+              {{/if}}
+              {{#if fato.tipoLabel}}<span class="fato-tipo-label">{{fato.tipoLabel}}</span>{{/if}}
+            </div>
 
-            {{!-- Rolar só este fato --}}
-            <button type="button" class="fato-roll-btn" data-action="rollEsseFato" data-id="{{fato.id}}"
-              title="Rolar só este Fato" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
-
-            {{!-- Romper / Restaurar --}}
-            <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-              title="{{#if fato.rompido}}Restaurar Fato{{else}}Romper Fato{{/if}}">
-              {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
-
-            <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+            {{!-- Ações (só para fatos com id) --}}
+            {{#if fato.id}}
+              <button type="button" class="fato-roll-btn" data-action="rollEsseFato" data-id="{{fato.id}}"
+                title="Rolar só este Fato" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
+              <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
+                title="{{#if fato.rompido}}Restaurar Fato{{else}}Romper Fato{{/if}}">
+                {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
+              {{#unless fato.obrigatorio}}
+                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+              {{/unless}}
+            {{/if}}
           </li>
         {{/each}}
       </ul>
