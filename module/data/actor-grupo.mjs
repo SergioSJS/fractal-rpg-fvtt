@@ -1,9 +1,8 @@
-export class DesafioData extends foundry.abstract.TypeDataModel {
+export class GrupoData extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     const f = foundry.data.fields;
     return {
       descricao: new f.StringField({ initial: "" }),
-      tipo:      new f.StringField({ initial: "" }),
       fatos: new f.ArrayField(
         new f.SchemaField({
           id:      new f.StringField({ required: true, initial: () => foundry.utils.randomID() }),
@@ -12,7 +11,6 @@ export class DesafioData extends foundry.abstract.TypeDataModel {
         }),
         { initial: [] }
       ),
-      reservas:      new f.ObjectField({ initial: {} }),
       reservasCustom: new f.ArrayField(
         new f.SchemaField({
           id:           new f.StringField({ initial: () => foundry.utils.randomID() }),
@@ -25,12 +23,7 @@ export class DesafioData extends foundry.abstract.TypeDataModel {
         }),
         { initial: [] }
       ),
-      reservasPinnadas: new f.ArrayField(new f.StringField(), { initial: [] }),
-      notas_arquiteto: new f.StringField({ initial: "" }),
+      notas: new f.StringField({ initial: "" }),
     };
-  }
-
-  get todosRompidos() {
-    return this.fatos.length > 0 && this.fatos.every(f => f.rompido);
   }
 }

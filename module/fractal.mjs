@@ -1,15 +1,18 @@
 import { PersonagemData } from "./data/actor-personagem.mjs";
 import { DesafioData } from "./data/actor-desafio.mjs";
+import { GrupoData } from "./data/actor-grupo.mjs";
 import { FatoItemData } from "./data/item-fato.mjs";
 import { registerSheets } from "./helpers/sheet-registration.mjs";
 import { registerSettings, injectCustomCSS, applyAccentColor } from "./settings/register.mjs";
 import { setupMacros } from "./helpers/macros.mjs";
+import { clockPanel } from "./helpers/clock-panel.mjs";
 
 Hooks.once("init", () => {
   console.log("Fractal RPG | Inicializando sistema");
 
   CONFIG.Actor.dataModels.personagem = PersonagemData;
   CONFIG.Actor.dataModels.desafio    = DesafioData;
+  CONFIG.Actor.dataModels.grupo      = GrupoData;
   CONFIG.Item.dataModels.fato        = FatoItemData;
 
   registerSettings();
@@ -39,5 +42,10 @@ Hooks.once("ready", async () => {
   applyAccentColor(cor);
 
   await setupMacros();
+  clockPanel.render();
+});
+
+Hooks.on("updateActor", actor => {
+  if (["desafio", "grupo"].includes(actor.type)) clockPanel.render();
 });
 

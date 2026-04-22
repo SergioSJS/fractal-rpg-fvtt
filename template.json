@@ -1,6 +1,6 @@
 {
   "Actor": {
-    "types": ["personagem", "desafio"],
+    "types": ["personagem", "desafio", "grupo"],
     "personagem": {
       "xp": {
         "value": 0
@@ -19,6 +19,12 @@
       "fatos": [],
       "reservas": {},
       "notas_arquiteto": ""
+    },
+    "grupo": {
+      "descricao": "",
+      "fatos": [],
+      "reservasCustom": [],
+      "notas": ""
     }
   },
   "Item": {

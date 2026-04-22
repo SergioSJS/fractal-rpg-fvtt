@@ -29,7 +29,8 @@
   "documentTypes": {
     "Actor": {
       "personagem": {},
-      "desafio": {}
+      "desafio": {},
+      "grupo": {}
     },
     "Item": {
       "fato": {}

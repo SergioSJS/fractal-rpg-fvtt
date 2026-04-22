@@ -769,3 +769,134 @@
   line-height: 1;
 }
 .btn-remove-custom:hover { color: var(--f-red-roll); }
+
+.btn-pin-reserva {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 0 2px;
+  flex-shrink: 0;
+  opacity: 0.35;
+  line-height: 1;
+  transition: opacity 0.15s;
+}
+.btn-pin-reserva:hover,
+.btn-pin-reserva.pinnado { opacity: 1; }
+
+/* ── Clock Panel ─────────────────────────────────── */
+
+#fractal-clock-panel {
+  padding: 6px 4px;
+  position: relative;
+  z-index: 60;
+  pointer-events: all;
+}
+
+#fractal-clock-panel * {
+  pointer-events: all;
+}
+
+.fractal-clocks-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fractal-clock-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.72);
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: #fff;
+}
+
+.clock-face {
+  --filled: 0;
+  --total: 6;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: conic-gradient(
+    var(--f-accent) 0deg calc(var(--filled) / var(--total) * 360deg),
+    #555 calc(var(--filled) / var(--total) * 360deg)
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.clock-face::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.clock-val {
+  position: relative;
+  z-index: 1;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.clock-label {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.clock-actor {
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clock-nome {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clock-gatilho {
+  font-size: 10px;
+  color: rgba(255, 200, 100, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clock-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.clock-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  border-radius: 3px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 1px 5px;
+  transition: background 0.12s;
+}
+.clock-btn:hover { background: rgba(255, 255, 255, 0.28); }
+.clock-unpin { font-size: 11px; color: rgba(255, 255, 255, 0.55); }
+.clock-unpin:hover { color: #ff6b6b; }

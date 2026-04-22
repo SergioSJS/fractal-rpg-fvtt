@@ -1,0 +1,22 @@
+<div class="fractal-clocks-wrapper">
+  {{#each clocks as |c|}}
+    <div class="fractal-clock-entry"
+      data-actor-id="{{c.actorId}}"
+      data-reserva-id="{{c.reservaId}}"
+      data-reserva-type="{{c.reservaType}}">
+      <div class="clock-face" style="--filled:{{c.atual}};--total:{{c.total}}">
+        <span class="clock-val">{{c.atual}}/{{c.total}}</span>
+      </div>
+      <div class="clock-label">
+        <span class="clock-actor">{{c.actorName}}</span>
+        <span class="clock-nome">{{c.nome}}</span>
+        {{#if c.gatilho}}<span class="clock-gatilho">{{c.gatilho}}</span>{{/if}}
+      </div>
+      <div class="clock-btns">
+        <button class="clock-btn clock-dec"   data-clock-action="dec"   title="Gastar">−</button>
+        <button class="clock-btn clock-inc"   data-clock-action="inc"   title="Recuperar">+</button>
+        {{#if isGM}}<button class="clock-btn clock-unpin" data-clock-action="unpin" title="Despinnar">×</button>{{/if}}
+      </div>
+    </div>
+  {{/each}}
+</div>

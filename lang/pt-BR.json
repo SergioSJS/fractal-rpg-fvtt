@@ -3,11 +3,13 @@
     "SystemName": "Fractal RPG",
     "Actor": {
       "Personagem": "Personagem",
-      "Desafio": "Desafio"
+      "Desafio": "Desafio",
+      "Grupo": "Grupo"
     },
     "Sheet": {
       "Personagem": "Ficha de Personagem",
       "Desafio": "Ficha de Desafio",
+      "Grupo": "Ficha de Grupo",
       "XP": "XP",
       "Reservas": "Reservas",
       "Fatos": "Fatos",
@@ -81,7 +83,8 @@
   "TYPES": {
     "Actor": {
       "personagem": "Personagem",
-      "desafio": "Desafio"
+      "desafio": "Desafio",
+      "grupo": "Grupo"
     },
     "Item": {
       "fato": "Fato"
