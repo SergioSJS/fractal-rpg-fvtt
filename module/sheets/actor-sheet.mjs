@@ -9,7 +9,7 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
     classes: ["fractal-rpg", "sheet", "actor", "personagem"],
     window:  { resizable: true },
     position: { width: 680, height: 820 },
-    form: { submitOnChange: true },
+    form: { submitOnChange: false },
     actions: {
       addFato:          FractalActorSheet.#addFato,
       removeFato:       FractalActorSheet.#removeFato,
@@ -59,6 +59,17 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
 
     const sheet = this.element.querySelector(".fractal-sheet");
     if (sheet) applySheetAppearance(sheet, "personagem");
+
+    // Campos name= não submetem via submitOnChange neste setup — listeners manuais
+    this.element.querySelector('input[name="name"]')?.addEventListener("change", async e => {
+      await this.actor.update({ name: e.target.value });
+    });
+    this.element.querySelector('input[name="system.xp.value"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.xp.value": Math.max(0, parseInt(e.target.value) || 0) });
+    });
+    this.element.querySelector('textarea[name="system.anotacoes"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.anotacoes": e.target.value });
+    });
 
     // Salva texto dos fatos
     this.element.querySelectorAll(".fato-texto[data-fato-idx]").forEach(input => {

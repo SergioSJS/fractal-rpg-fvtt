@@ -37,7 +37,13 @@
                   <span class="bubble empty"  data-action="incrementReserva" data-reserva-id="{{../id}}" title="Recuperar">○</span>
                 {{/if}}
               {{/each}}
-              <span class="reserva-valor">{{res.atual}}/{{res.total}}</span>
+              <span class="reserva-valor">{{res.atual}}/</span>
+              {{#if ../editable}}
+                <input type="number" class="reserva-total-input" data-reserva-id="{{res.id}}"
+                  value="{{res.total}}" min="1" max="20" title="Máximo da reserva" />
+              {{else}}
+                <span class="reserva-valor">{{res.total}}</span>
+              {{/if}}
             </div>
             {{#if res.gatilho}}
               <div class="reserva-detalhe">✦ {{res.gatilho}}{{#if res.consequencia}} · {{res.consequencia}}{{/if}}</div>
@@ -56,7 +62,7 @@
               <div class="custom-reserva-header">
                 <input type="text" class="custom-reserva-field reserva-nome-input" data-custom-id="{{res.id}}" data-field="nome"
                   value="{{res.nome}}" placeholder="Nome" />
-                {{#if ../../isGM}}<button type="button" class="btn-pin-reserva {{#if res.pinnado}}pinnado{{/if}}"
+                {{#if ../isGM}}<button type="button" class="btn-pin-reserva {{#if res.pinnado}}pinnado{{/if}}"
                   data-action="togglePin" data-custom-id="{{res.id}}" title="Pinnar no painel">📌</button>{{/if}}
                 <button type="button" class="btn-remove-custom" data-action="removeCustomReserva" data-custom-id="{{res.id}}" title="Remover">×</button>
               </div>

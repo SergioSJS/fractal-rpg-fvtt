@@ -7,7 +7,7 @@ export class FractalDesafioSheet extends api.HandlebarsApplicationMixin(sheets.A
     classes: ["fractal-rpg", "sheet", "actor", "desafio"],
     window:  { resizable: true },
     position: { width: 620, height: 720 },
-    form: { submitOnChange: true },
+    form: { submitOnChange: false },
     actions: {
       addFato:             FractalDesafioSheet.#addFato,
       removeFato:          FractalDesafioSheet.#removeFato,
@@ -60,6 +60,31 @@ export class FractalDesafioSheet extends api.HandlebarsApplicationMixin(sheets.A
 
     const sheet = this.element.querySelector(".fractal-sheet");
     if (sheet) applySheetAppearance(sheet, "desafio");
+
+    // Campos name= — listeners manuais
+    this.element.querySelector('input[name="name"]')?.addEventListener("change", async e => {
+      await this.actor.update({ name: e.target.value });
+    });
+    this.element.querySelector('input[name="system.tipo"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.tipo": e.target.value });
+    });
+    this.element.querySelector('textarea[name="system.notas_arquiteto"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.notas_arquiteto": e.target.value });
+    });
+
+    // Total editável das reservas de template
+    this.element.querySelectorAll(".reserva-total-input[data-reserva-id]").forEach(input => {
+      input.addEventListener("change", async e => {
+        const id        = e.target.dataset.reservaId;
+        const novoTotal = Math.max(1, parseInt(e.target.value) || 1);
+        const reservas  = foundry.utils.deepClone(this.actor.system.reservas);
+        const def       = (game.settings.get?.("fractal-rpg", "reservasDesafio") ?? []).find(r => r.id === id);
+        if (!reservas[id]) reservas[id] = { atual: def?.valor_inicial ?? 3, total: def?.valor_inicial ?? 3 };
+        reservas[id].total = novoTotal;
+        reservas[id].atual = Math.min(reservas[id].atual, novoTotal);
+        await this.actor.update({ "system.reservas": reservas });
+      });
+    });
 
     // Salva texto dos fatos
     this.element.querySelectorAll(".fato-texto[data-fato-idx]").forEach(input => {

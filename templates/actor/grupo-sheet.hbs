@@ -27,7 +27,7 @@
               <div class="custom-reserva-header">
                 <input type="text" class="custom-reserva-field reserva-nome-input" data-custom-id="{{res.id}}" data-field="nome"
                   value="{{res.nome}}" placeholder="Nome" />
-                {{#if ../../isGM}}<button type="button" class="btn-pin-reserva {{#if res.pinnado}}pinnado{{/if}}"
+                {{#if ../isGM}}<button type="button" class="btn-pin-reserva {{#if res.pinnado}}pinnado{{/if}}"
                   data-action="togglePin" data-custom-id="{{res.id}}" title="Pinnar no painel">📌</button>{{/if}}
                 <button type="button" class="btn-remove-custom" data-action="removeCustomReserva" data-custom-id="{{res.id}}" title="Remover">×</button>
               </div>

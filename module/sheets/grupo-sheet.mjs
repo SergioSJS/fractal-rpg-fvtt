@@ -7,7 +7,7 @@ export class FractalGrupoSheet extends api.HandlebarsApplicationMixin(sheets.Act
     classes: ["fractal-rpg", "sheet", "actor", "grupo"],
     window:  { resizable: true },
     position: { width: 620, height: 720 },
-    form: { submitOnChange: true },
+    form: { submitOnChange: false },
     actions: {
       addFato:             FractalGrupoSheet.#addFato,
       removeFato:          FractalGrupoSheet.#removeFato,
@@ -47,6 +47,17 @@ export class FractalGrupoSheet extends api.HandlebarsApplicationMixin(sheets.Act
 
     const sheet = this.element.querySelector(".fractal-sheet");
     if (sheet) applySheetAppearance(sheet, "desafio");
+
+    // Campos name= — listeners manuais
+    this.element.querySelector('input[name="name"]')?.addEventListener("change", async e => {
+      await this.actor.update({ name: e.target.value });
+    });
+    this.element.querySelector('input[name="system.descricao"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.descricao": e.target.value });
+    });
+    this.element.querySelector('textarea[name="system.notas"]')?.addEventListener("change", async e => {
+      await this.actor.update({ "system.notas": e.target.value });
+    });
 
     this.element.querySelectorAll(".fato-texto[data-fato-idx]").forEach(input => {
       input.addEventListener("change", async e => {

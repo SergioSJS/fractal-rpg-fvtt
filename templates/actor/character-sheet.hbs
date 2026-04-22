@@ -38,9 +38,9 @@
                 {{/if}}
               {{/each}}
               <span class="reserva-valor">{{res.atual}}/</span>
-              {{#if editable}}
+              {{#if ../editable}}
                 <input type="number" class="reserva-total-input" data-reserva-id="{{res.id}}"
-                  value="{{res.total}}" min="1" max="10" title="Máximo da reserva" />
+                  value="{{res.total}}" min="1" max="20" title="Máximo da reserva" />
               {{else}}
                 <span class="reserva-valor">{{res.total}}</span>
               {{/if}}

@@ -1,14 +1,5 @@
-/**
- * Interlúdio — cada jogador escolhe até 2 ações entre sessões.
- * Ao confirmar: todos os Fatos rompidos são restaurados.
- *
- * Ações (design doc 4.3):
- *   Evoluir    — 3 XP → escrever novo Fato
- *   Aprimorar  — 3 XP → +1 ao total de uma Reserva (máx configurado)
- *   Descansar  — grátis → recuperar 1 ponto em qualquer Reserva
- *   Mudar      — grátis → reescrever texto de um Fato existente
- *   Preparar-se — grátis → +1 XP
- */
+const { DialogV2 } = foundry.applications.api;
+
 export function openInterludeDialog(actor) {
   const system   = actor.system;
   const reservas = (game.settings.get("fractal-rpg", "reservasPersonagem") ?? []).map(def => {
@@ -40,7 +31,7 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-xp">3 XP</span>
         <span class="acao-desc">Escrever novo Fato</span>
       </label>
-      <div class="acao-config" hidden>
+      <div class="acao-config" style="display:none">
         <input type="text" name="evoluir_texto" placeholder="Texto do novo Fato..." style="width:100%"/>
       </div>
     </div>
@@ -52,7 +43,7 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-xp">3 XP</span>
         <span class="acao-desc">+1 ao total de uma Reserva</span>
       </label>
-      <div class="acao-config" hidden>
+      <div class="acao-config" style="display:none">
         <select name="aprimorar_reserva">
           ${maxReservaOpts.map(r => `<option value="${r.id}">${r.nome} (${r.atual}/${r.total} → máx ${r.valor_maximo_permitido ?? 6})</option>`).join("") || '<option disabled>Todas no máximo</option>'}
         </select>
@@ -66,10 +57,8 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-gratis">Grátis</span>
         <span class="acao-desc">Recuperar 1 ponto de Reserva</span>
       </label>
-      <div class="acao-config" hidden>
-        <select name="descansar_reserva">
-          ${reservaOpts(() => true)}
-        </select>
+      <div class="acao-config" style="display:none">
+        <select name="descansar_reserva">${reservaOpts(() => true)}</select>
       </div>
     </div>
 
@@ -80,7 +69,7 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-gratis">Grátis</span>
         <span class="acao-desc">Reescrever um Fato existente</span>
       </label>
-      <div class="acao-config" hidden>
+      <div class="acao-config" style="display:none">
         <select name="mudar_fato_idx">${fatoOpts}</select>
         <input type="text" name="mudar_fato_texto" placeholder="Novo texto do Fato..." style="width:100%;margin-top:4px"/>
       </div>
@@ -118,46 +107,49 @@ export function openInterludeDialog(actor) {
 .xp-atual { font-size:11px; color:#888; text-align:right; }
 </style>`;
 
-  new Dialog({
-    title: "Interlúdio",
+  DialogV2.wait({
+    window:      { title: "Interlúdio" },
+    position:    { width: 480 },
     content,
-    buttons: {
-      confirmar: {
-        icon:  '<i class="fas fa-moon"></i>',
-        label: "Confirmar Interlúdio",
-        callback: async (html) => {
-          await _executarInterlude(actor, html, reservas, fatos);
-        },
-      },
-      cancelar: {
-        icon:  '<i class="fas fa-times"></i>',
-        label: "Cancelar",
-      },
-    },
-    default: "confirmar",
-    render: (html) => {
-      // Mostrar/esconder config ao marcar ação
-      html.on("change", 'input[name="acao"]', e => {
-        const acao = e.currentTarget.value;
-        const config = html.find(`.acao-item[data-acao="${acao}"] .acao-config`);
-        if (e.currentTarget.checked) config.show();
-        else config.hide();
+    rejectClose: false,
+    render: (_ev, app) => {
+      const el = app.element;
+      el.querySelectorAll('input[name="acao"]').forEach(cb => {
+        cb.addEventListener("change", () => {
+          const acao   = cb.value;
+          const config = el.querySelector(`.acao-item[data-acao="${acao}"] .acao-config`);
+          if (config) config.style.display = cb.checked ? "block" : "none";
 
-        // Limitar a 2 ações selecionadas
-        const marcados = html.find('input[name="acao"]:checked').length;
-        html.find('input[name="acao"]:not(:checked)').prop("disabled", marcados >= 2);
+          const total = el.querySelectorAll('input[name="acao"]:checked').length;
+          el.querySelectorAll('input[name="acao"]:not(:checked)').forEach(i => { i.disabled = total >= 2; });
+          el.querySelectorAll('input[name="acao"]:checked').forEach(i => { i.disabled = false; });
+        });
       });
     },
-  }).render(true);
+    buttons: [
+      {
+        action:   "confirmar",
+        label:    "Confirmar Interlúdio",
+        icon:     "fas fa-moon",
+        default:  true,
+        callback: async (_ev, _btn, dialog) => {
+          await _executarInterlude(actor, dialog.element, reservas, fatos);
+        },
+      },
+      {
+        action: "cancelar",
+        label:  "Cancelar",
+      },
+    ],
+  });
 }
 
-async function _executarInterlude(actor, html, reservas, fatos) {
-  const acoes    = html.find('input[name="acao"]:checked').map((_, el) => el.value).get();
+async function _executarInterlude(actor, el, reservas, fatos) {
+  const acoes    = [...el.querySelectorAll('input[name="acao"]:checked')].map(i => i.value);
   const system   = actor.system;
   const updates  = {};
   const mensagens = [];
 
-  // 1. Restaurar todos os Fatos rompidos
   const fatosRestaurados = foundry.utils.deepClone(fatos).map(f => ({ ...f, rompido: false }));
   updates["system.fatos"] = fatosRestaurados;
   if (fatos.some(f => f.rompido)) mensagens.push("🔄 Todos os Fatos rompidos foram restaurados.");
@@ -166,9 +158,9 @@ async function _executarInterlude(actor, html, reservas, fatos) {
 
   for (const acao of acoes) {
     if (acao === "evoluir") {
-      const texto = html.find('input[name="evoluir_texto"]').val().trim();
+      const texto = el.querySelector('input[name="evoluir_texto"]')?.value?.trim() ?? "";
       if (novoXP < 3) { ui.notifications.warn("XP insuficiente para Evoluir (custo: 3 XP)."); continue; }
-      if (!texto) { ui.notifications.warn("Escreva o texto do novo Fato para Evoluir."); continue; }
+      if (!texto)     { ui.notifications.warn("Escreva o texto do novo Fato para Evoluir."); continue; }
       novoXP -= 3;
       const fatos2 = updates["system.fatos"] ?? foundry.utils.deepClone(fatos);
       fatos2.push({ id: foundry.utils.randomID(), texto, rompido: false, predefinido: false });
@@ -177,7 +169,7 @@ async function _executarInterlude(actor, html, reservas, fatos) {
     }
 
     if (acao === "aprimorar") {
-      const reservaId = html.find('select[name="aprimorar_reserva"]').val();
+      const reservaId = el.querySelector('select[name="aprimorar_reserva"]')?.value ?? "";
       if (novoXP < 3) { ui.notifications.warn("XP insuficiente para Aprimorar (custo: 3 XP)."); continue; }
       const def = reservas.find(r => r.id === reservaId);
       if (!def) continue;
@@ -192,8 +184,8 @@ async function _executarInterlude(actor, html, reservas, fatos) {
     }
 
     if (acao === "descansar") {
-      const reservaId = html.find('select[name="descansar_reserva"]').val();
-      const def = reservas.find(r => r.id === reservaId);
+      const reservaId    = el.querySelector('select[name="descansar_reserva"]')?.value ?? "";
+      const def          = reservas.find(r => r.id === reservaId);
       if (!def) continue;
       const reservasCopy = updates["system.reservas"] ?? foundry.utils.deepClone(system.reservas);
       if (!reservasCopy[reservaId]) reservasCopy[reservaId] = { atual: def.valor_inicial, total: def.valor_inicial };
@@ -204,8 +196,8 @@ async function _executarInterlude(actor, html, reservas, fatos) {
     }
 
     if (acao === "mudar") {
-      const idx      = parseInt(html.find('select[name="mudar_fato_idx"]').val());
-      const novoTexto = html.find('input[name="mudar_fato_texto"]').val().trim();
+      const idx       = parseInt(el.querySelector('select[name="mudar_fato_idx"]')?.value ?? "-1");
+      const novoTexto = el.querySelector('input[name="mudar_fato_texto"]')?.value?.trim() ?? "";
       if (!novoTexto) { ui.notifications.warn("Escreva o novo texto do Fato para Mudar."); continue; }
       const fatos2 = updates["system.fatos"] ?? foundry.utils.deepClone(fatos);
       if (fatos2[idx]) {
@@ -225,7 +217,6 @@ async function _executarInterlude(actor, html, reservas, fatos) {
   updates["system.xp.value"] = novoXP;
   await actor.update(updates);
 
-  // Postar resumo no chat
   const resumo = mensagens.length
     ? `<b>Interlúdio de ${actor.name}</b><br>${mensagens.join("<br>")}`
     : `<b>Interlúdio de ${actor.name}</b><br>Descansou sem ações.`;
