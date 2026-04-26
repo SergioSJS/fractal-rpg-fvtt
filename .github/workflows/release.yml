@@ -32,7 +32,7 @@ jobs:
           zip -r fractal-rpg.zip \
             module/ templates/ lang/ \
             styles/fractal.css \
-            system.json template.json
+            system.json
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
