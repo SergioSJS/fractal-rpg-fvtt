@@ -1,11 +1,6 @@
 {
   "FRACTAL": {
     "SystemName": "Fractal RPG",
-    "Actor": {
-      "Personagem": "Personagem",
-      "Desafio": "Desafio",
-      "Grupo": "Grupo"
-    },
     "Sheet": {
       "Personagem": "Ficha de Personagem",
       "Desafio": "Ficha de Desafio",
@@ -16,12 +11,24 @@
       "Anotacoes": "Anotações"
     },
     "Fato": {
-      "Rompido": "Rompido",
+      "Quebrado": "Quebrado",
       "Predefinido": "Pré-definido",
       "Placeholder": "Escreva o Fato...",
       "AddBtn": "Adicionar Fato",
       "RemoveBtn": "Remover Fato",
+      "QuebrarBtn": "Quebrar Fato",
+      "RestaurarBtn": "Restaurar Fato",
       "RollBtn": "Rolar este Fato"
+    },
+    "Obstaculo": {
+      "Singular": "Obstáculo",
+      "Plural": "Obstáculos",
+      "Quebrado": "Quebrado",
+      "Placeholder": "Escreva o Obstáculo...",
+      "AddBtn": "Adicionar Obstáculo",
+      "RemoveBtn": "Remover Obstáculo",
+      "QuebrarBtn": "Quebrar Obstáculo",
+      "RestaurarBtn": "Restaurar Obstáculo"
     },
     "Reserva": {
       "Atual": "Atual",
@@ -55,7 +62,9 @@
     },
     "Desafio": {
       "Superado": "DESAFIO SUPERADO",
-      "NotasArquiteto": "Notas do Arquiteto"
+      "NotasArquiteto": "Notas do Arquiteto",
+      "Obstaculos": "Obstáculos",
+      "ObstaculosPadrao": "Obstáculos Padrão"
     },
     "Settings": {
       "ReservasMundo": {
@@ -67,8 +76,14 @@
         "Label": "Abrir Painel",
         "Dica": "Configure Reservas de Personagens, Desafios e aparência das fichas."
       },
-      "XPEpisodio": "XP por Episódio",
-      "XPArco": "XP por Arco",
+      "XPEpisodio": {
+        "Nome": "XP por Episódio",
+        "Dica": "Quantos pontos de XP a macro \"Fim de Episódio\" concede a cada personagem do mundo."
+      },
+      "XPArco": {
+        "Nome": "XP por Arco",
+        "Dica": "Quantos pontos de XP a macro \"Fim de Arco\" concede a cada personagem do mundo."
+      },
       "ReservasAtualizadas": "Reservas do mundo atualizadas.",
       "CSS": {
         "Nome": "CSS Customizado",
@@ -89,5 +104,13 @@
     "Item": {
       "fato": "Fato"
     }
+  },
+  "ACTOR": {
+    "TypePersonagem": "Personagem",
+    "TypeDesafio": "Desafio",
+    "TypeGrupo": "Grupo"
+  },
+  "ITEM": {
+    "TypeFato": "Fato"
   }
 }

@@ -15,7 +15,7 @@ export async function openRollDialog(actor, selectedIds = [], onClose = null) {
         return `<label class="fato-check-row${cls}">
           <input type="checkbox" name="fato" value="${f.id}" ${checked} ${disabled} />
           <span>${f.texto || "<em>(Fato sem nome)</em>"}</span>
-          ${f.rompido ? '<span class="badge-rompido">💥 rompido</span>' : ""}
+          ${f.rompido ? '<span class="badge-rompido">💥 quebrado</span>' : ""}
         </label>`;
       }).join("")
     : '<p class="no-fatos">Nenhum Fato disponível. Você rolará 1d6 (sucesso apenas no 6).</p>';
@@ -117,11 +117,11 @@ async function _escolherRupturas(actor, fatosUsados, qtdRupturas) {
 
   const content = `
 <div class="fractal-roll-dialog">
-  <p style="margin:0 0 8px;font-size:12px;color:#b71c1c;font-weight:600;">
-    💥 ${max} Ruptura${max > 1 ? "s" : ""} — escolha qual${max > 1 ? "is Fatos rompem" : " Fato rompe"}:
+  <p class="ruptura-warning">
+    💥 ${max} Ruptura${max > 1 ? "s" : ""} — escolha qual${max > 1 ? "is Fatos quebram" : " Fato quebra"}:
   </p>
   <div class="fatos-checkboxes" id="ruptura-lista">${opcoesHtml}</div>
-  <p id="ruptura-aviso" style="font-size:11px;color:#999;margin:4px 0 0;"></p>
+  <p id="ruptura-aviso" class="ruptura-aviso"></p>
 </div>`;
 
   let escolhidos = [];

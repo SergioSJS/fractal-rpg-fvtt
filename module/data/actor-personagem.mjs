@@ -9,6 +9,8 @@ export class PersonagemData extends foundry.abstract.TypeDataModel {
         new f.SchemaField({
           id:          new f.StringField({ required: true, initial: () => foundry.utils.randomID() }),
           texto:       new f.StringField({ required: false, initial: "" }),
+          // Nome interno legado (v1.0.1 do SRD usava "Rompido").
+          // Na v1.0.2 o termo passou a ser "Quebrado", refletido apenas na UI.
           rompido:     new f.BooleanField({ initial: false }),
           predefinido: new f.BooleanField({ initial: false }),
           tipo:        new f.StringField({ initial: "" }),

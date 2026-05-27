@@ -71,7 +71,7 @@
 
             {{!-- Marcar para rolar (◎/◉) --}}
             <button type="button" class="fato-sel-btn" data-action="toggleSelecao" data-id="{{fato.id}}"
-              title="{{#if fato.rompido}}Fato rompido{{else if fato.selected}}Desmarcar{{else}}Marcar para rolar{{/if}}"
+              title="{{#if fato.rompido}}Fato quebrado{{else if fato.selected}}Desmarcar{{else}}Marcar para rolar{{/if}}"
               {{#if fato.rompido}}disabled{{/if}}>{{#if fato.rompido}}💥{{else if fato.selected}}◉{{else}}◎{{/if}}</button>
 
             {{!-- Texto + Label de tipo --}}
@@ -92,7 +92,7 @@
               <button type="button" class="fato-roll-btn" data-action="rollEsseFato" data-id="{{fato.id}}"
                 title="Rolar só este Fato" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
               <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-                title="{{#if fato.rompido}}Restaurar Fato{{else}}Romper Fato{{/if}}">
+                title="{{#if fato.rompido}}Restaurar Fato{{else}}Quebrar Fato{{/if}}">
                 {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
               {{#unless fato.obrigatorio}}
                 <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>

@@ -5,7 +5,7 @@
 > Feito com amor para a comunidade, de graça e de código aberto.
 
 Sistema para jogar **[Fractal RPG](https://fractal-system.itch.io/pt-br)** no [Foundry Virtual Tabletop](https://foundryvtt.com/) v13+.  
-Baseado no SRD v1.0.1 de Igor Téuri & Walter Licínio (CC BY 4.0).
+Baseado no SRD v1.0.2 de Igor Téuri & Walter Licínio (CC BY 4.0).
 
 > 🎲 Conheça o canal **[Dados Críticos](https://www.youtube.com/@dadoscriticos)** no YouTube!
 
@@ -33,7 +33,7 @@ Três tipos de ficha, cada uma com **cor de destaque própria** configurável pe
 
 ![Rolagem com Ruptura](assets/Rolagem%20com%20Ruptura.png)
 
-Quando a rolagem gera Rupturas, o sistema pausa o chat e abre um modal pedindo ao jogador que **escolha quais Fatos romper** — exatamente como o sistema pede. Após a escolha, a mensagem no chat é atualizada com o resultado final.
+Quando a rolagem gera Rupturas, o sistema pausa o chat e abre um modal pedindo ao jogador que **escolha quais Fatos quebrar** — exatamente como o SRD v1.0.2 pede. Após a escolha, a mensagem no chat é atualizada com o resultado final.
 
 ---
 
@@ -62,7 +62,7 @@ Painel de configuração completo com quatro abas:
 ### Personagens / Desafios / Grupos
 Cada aba tem seções independentes para:
 - **Reservas** — nome, valor inicial, máximo, gatilho e consequência
-- **Fatos Padrão** — tipos de fato que aparecem automaticamente em todas as fichas (ex: Ancestralidade, Classe), com flag de obrigatório
+- **Fatos Padrão** (Obstáculos Padrão na aba de Desafios) — tipos que aparecem automaticamente em todas as fichas (ex: Ancestralidade, Classe), com flag de obrigatório
 - **Cor de destaque** — accent color próprio para cada tipo de ficha, refletido no cabeçalho, bordas e no painel de relógios
 - **Background** — imagem de fundo com controle de opacidade
 - **Pré-configurações** — dropdown com presets prontos (Fantasia Medieval, Ficção Científica, Horror, Genérico), cada um com reservas, fatos, cores e CSS temáticos
@@ -75,7 +75,7 @@ Cada aba tem seções independentes para:
 ## ✅ Funcionalidades completas
 
 ### Ficha de Personagem
-- **Fatos** — criação, edição e remoção inline; selecionar até 3 para rolar; romper/restaurar; Fatos Padrão definidos pelo GM aparecem como slots fixos com label do tipo
+- **Fatos** — criação, edição e remoção inline; selecionar até 3 para rolar; quebrar/restaurar; Fatos Padrão definidos pelo GM aparecem como slots fixos com label do tipo
 - **Reservas** — configuradas pelo GM por mundo, tracker de bubbles clicável, total ajustável por ficha
 - **Rolagem de Risco** — selecione Fatos, role d6s, escolha Impulso e resolva Rupturas com modal interativo
 - **Interlúdio** — seis ações com custo de XP e confirmação
@@ -83,7 +83,7 @@ Cada aba tem seções independentes para:
 
 ### Ficha de Desafio
 - **Reservas de mundo** + **reservas customizadas** por desafio, ambas com pin para o painel de relógios
-- **Fatos** com toggle de ruptura — badge **SUPERADO** quando todos estão rompidos
+- **Obstáculos** (componentes do Desafio no SRD v1.0.2) com toggle de Ruptura — badge **SUPERADO** quando todos estão quebrados
 - **Notas do Arquiteto** visíveis apenas para GM/dono
 
 ### Ficha de Grupo
@@ -163,6 +163,6 @@ O CI irá:
 ## 📋 Licença e Créditos
 
 - O código deste repositório está sob [MIT License](LICENSE).
-- Sistema **[Fractal RPG](https://fractal-system.itch.io/pt-br)** criado por Igor Téuri & Walter Licínio — todo o conteúdo narrativo e de regras pertence a eles (CC BY 4.0).
+- Sistema **[Fractal RPG](https://fractal-system.itch.io/pt-br)** criado por Igor Téuri & Walter Licínio — todo o conteúdo narrativo e de regras pertence a eles (CC BY 4.0). Esta adaptação acompanha o SRD v1.0.2.
 - Canal **[Dados Críticos](https://www.youtube.com/@dadoscriticos)** — onde o sistema é usado e divulgado.
 - Feito por **Sérgio Sousa** — [meioorc.com](https://meioorc.com)

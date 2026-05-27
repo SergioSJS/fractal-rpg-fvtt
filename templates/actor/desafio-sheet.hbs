@@ -7,7 +7,7 @@
         <input type="text" name="name" value="{{actor.name}}" placeholder="Nome do Desafio" />
       </div>
       <div class="header-bottom">
-        <input type="text" name="system.tipo" value="{{system.tipo}}" placeholder="Tipo (Criatura, Obstáculo...)" class="desafio-tipo-input" />
+        <input type="text" name="system.tipo" value="{{system.tipo}}" placeholder="Tipo (Criatura, Obstáculo, Cena...)" class="desafio-tipo-input" />
         {{#if superado}}<span class="superado-badge">✓ SUPERADO</span>{{/if}}
       </div>
     </div>
@@ -103,11 +103,11 @@
     {{/unless}}{{/unless}}
   </section>
 
-  {{!-- FATOS --}}
+  {{!-- OBSTÁCULOS (internamente "fatos" no schema, "Obstáculos" no SRD v1.0.2) --}}
   <section class="fractal-fatos">
     <div class="section-title">
-      Fatos
-      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
+      Obstáculos
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato" title="Adicionar Obstáculo">+ Adicionar</button>{{/if}}
     </div>
     {{#if fatos.length}}
       <ul class="fatos-list">
@@ -116,7 +116,7 @@
             <div class="fato-conteudo">
               {{#if fato.id}}
                 <input type="text" data-fato-id="{{fato.id}}" value="{{fato.texto}}"
-                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Fato do desafio...{{/if}}"
+                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Escreva o Obstáculo...{{/if}}"
                   class="fato-texto" />
               {{else}}
                 <input type="text" data-predefinido-tipo="{{fato.tipoLabel}}" value="{{fato.texto}}"
@@ -126,7 +126,7 @@
             </div>
             {{#if fato.id}}
               <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-                title="{{#if fato.rompido}}Restaurar{{else}}Romper{{/if}}">
+                title="{{#if fato.rompido}}Restaurar Obstáculo{{else}}Quebrar Obstáculo{{/if}}">
                 {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
               {{#unless fato.obrigatorio}}
                 <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
@@ -136,7 +136,7 @@
         {{/each}}
       </ul>
     {{else}}
-      <p class="empty-msg">Nenhum Fato. Clique em + para adicionar.</p>
+      <p class="empty-msg">Nenhum Obstáculo. Clique em + para adicionar.</p>
     {{/if}}
   </section>
 

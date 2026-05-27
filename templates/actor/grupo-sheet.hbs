@@ -89,7 +89,7 @@
             </div>
             {{#if fato.id}}
               <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-                title="{{#if fato.rompido}}Restaurar{{else}}Romper{{/if}}">
+                title="{{#if fato.rompido}}Restaurar Fato{{else}}Quebrar Fato{{/if}}">
                 {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
               {{#unless fato.obrigatorio}}
                 <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>

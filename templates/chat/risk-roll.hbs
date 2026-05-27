@@ -19,7 +19,7 @@
       <span class="dado-maior">maior: <strong>{{maior}}</strong></span>
     </div>
 
-    <div style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+    <div class="roll-badges">
       {{#if semFatos}}
         <span class="roll-badge badge-sem-fatos">Sem Fatos — sucesso só no 6</span>
       {{/if}}
@@ -39,7 +39,7 @@
     {{/if}}
     {{#if fatosRompidos.length}}
       <div class="ruptura-lista">
-        Rompeu: {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
+        Quebrou: {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
       </div>
     {{/if}}
 

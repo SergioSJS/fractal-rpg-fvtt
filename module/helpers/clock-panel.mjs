@@ -14,13 +14,17 @@ class FractalClockPanel {
       const accentKey   = actor.type === "grupo" ? "corAccentGrupo" : "corAccentDesafio";
       const accentColor = game.settings.get?.("fractal-rpg", accentKey) ?? "#8B0000";
 
-      // World reservas — desafio only
+      // World reservas — desafio only.
+      // Quando a reserva ainda não foi inicializada no ator, o total
+      // default é `valor_inicial` (não `valor_maximo_permitido`), igual
+      // à lógica da ficha em desafio-sheet.mjs. `valor_maximo_permitido`
+      // é só o teto até onde "Aprimorar" pode crescer o total.
       if (actor.type === "desafio") {
         const defs     = game.settings.get?.("fractal-rpg", "reservasDesafio") ?? [];
         const pinnadas = new Set(actor.system.reservasPinnadas ?? []);
         for (const def of defs) {
           if (!pinnadas.has(def.id)) continue;
-          const vals = actor.system.reservas?.[def.id] ?? { atual: def.valor_inicial ?? 0, total: def.valor_maximo_permitido ?? 6 };
+          const vals = actor.system.reservas?.[def.id] ?? { atual: def.valor_inicial ?? 0, total: def.valor_inicial ?? 0 };
           clocks.push({
             actorId:     actor.id,
             actorName:   actor.name,
@@ -28,7 +32,7 @@ class FractalClockPanel {
             reservaType: "world",
             nome:        def.nome || "Reserva",
             atual:       vals.atual ?? 0,
-            total:       vals.total ?? def.valor_maximo_permitido ?? 6,
+            total:       vals.total ?? def.valor_inicial ?? 0,
             gatilho:     def.gatilho || "",
             accentColor,
           });
@@ -106,12 +110,12 @@ class FractalClockPanel {
       const def      = (game.settings.get?.("fractal-rpg", "reservasDesafio") ?? []).find(d => d.id === reservaId);
       if (!reservas[reservaId]) {
         if (!def) return;
-        reservas[reservaId] = { atual: def.valor_inicial ?? 0, total: def.valor_maximo_permitido ?? 6 };
+        reservas[reservaId] = { atual: def.valor_inicial ?? 0, total: def.valor_inicial ?? 0 };
       }
       if (action === "dec") {
         reservas[reservaId].atual = Math.max(0, (reservas[reservaId].atual ?? 0) - 1);
       } else if (action === "inc") {
-        const max = reservas[reservaId].total ?? (def?.valor_maximo_permitido ?? 6);
+        const max = reservas[reservaId].total ?? def?.valor_inicial ?? 0;
         reservas[reservaId].atual = Math.min(max, (reservas[reservaId].atual ?? 0) + 1);
       }
       await actor.update({ "system.reservas": reservas });

@@ -13,7 +13,7 @@ const DEFAULT_CSS = `/* ══════════════════�
   --f-border:       #c8c0b0;  /* cor das bordas */
   --f-border-light: #ddd8cc;  /* bordas mais suaves */
   --f-green:        #1b5e20;  /* reservas cheias, sucesso */
-  --f-red-roll:     #b71c1c;  /* falha, fatos rompidos */
+  --f-red-roll:     #b71c1c;  /* falha, fatos quebrados */
   --f-orange:       #e65100;  /* impulso */
   --f-purple:       #6a1b9a;  /* ruptura */
   --f-blue:         #1565c0;  /* fatos selecionados */
@@ -112,7 +112,8 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
         const preset  = presets[key];
         if (!preset) return;
         this._fillFromPreset(target, preset);
-        e.target.value = "";
+        // Mantém a opção selecionada visível como confirmação. Para re-aplicar
+        // o mesmo preset, o usuário escolhe outra opção (incl. "— Escolher —") e volta.
       });
     });
 

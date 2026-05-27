@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "types": ["fvtt-types"],
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM"],
+    "checkJs": false
+  },
+  "include": ["module/**/*.mjs"],
+  "exclude": ["node_modules"]
+}

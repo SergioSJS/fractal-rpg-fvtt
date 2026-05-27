@@ -6,21 +6,34 @@ export function openInterludeDialog(actor) {
     const vals = system.reservas[def.id] ?? { atual: def.valor_inicial, total: def.valor_inicial };
     return { ...def, ...vals };
   });
-  const fatos = system.fatos;
+
+  // Mesma lógica da ficha (FractalActorSheet#_prepareContext):
+  // o dropdown de "Mudar" só lista predefinidos cujo tipo ainda existe nas configs
+  // do GM (descarta órfãos de tipos removidos/renomeados), seguidos dos Fatos livres.
+  // IMPORTANTE: usamos a lista crua (system.fatos) ao persistir mudanças para não
+  // apagar do banco Fatos órfãos que ficam apenas escondidos da UI.
+  const fatos        = system.fatos;
+  const fatosDefs    = game.settings.get("fractal-rpg", "fatosPersonagem") ?? [];
+  const predefinidos = fatosDefs
+    .map(def => fatos.find(f => f.predefinido && f.tipo === def.tipo))
+    .filter(Boolean);
+  const livres       = fatos.filter(f => !f.predefinido);
+  const fatosVisiveis = [...predefinidos, ...livres];
 
   const reservaOpts = (filtrar) =>
     reservas.filter(filtrar).map(r => `<option value="${r.id}">${r.nome} (${r.atual}/${r.total})</option>`).join("") ||
     '<option disabled>Nenhuma disponível</option>';
 
-  const fatoOpts = fatos.map((f, i) =>
-    `<option value="${i}">${f.texto || "(Fato " + (i + 1) + ")"}</option>`
-  ).join("") || '<option disabled>Nenhum Fato</option>';
+  const fatoOpts = fatosVisiveis.map(f => {
+    const label = f.texto || `(${f.tipo || "Fato sem texto"})`;
+    return `<option value="${f.id}">${label}</option>`;
+  }).join("") || '<option disabled>Nenhum Fato</option>';
 
   const maxReservaOpts = reservas.filter(r => r.total < (r.valor_maximo_permitido ?? 6));
 
   const content = `
 <div class="fractal-interlude-dialog">
-  <p class="interlude-hint">Escolha até <strong>2 ações</strong>. Ao confirmar, todos os Fatos rompidos serão restaurados.</p>
+  <p class="interlude-hint">Escolha até <strong>2 ações</strong>. Ao confirmar, todos os Fatos quebrados serão restaurados.</p>
 
   <div class="acoes-lista">
 
@@ -31,8 +44,8 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-xp">3 XP</span>
         <span class="acao-desc">Escrever novo Fato</span>
       </label>
-      <div class="acao-config" style="display:none">
-        <input type="text" name="evoluir_texto" placeholder="Texto do novo Fato..." style="width:100%"/>
+      <div class="acao-config" hidden>
+        <input type="text" name="evoluir_texto" placeholder="Texto do novo Fato..." />
       </div>
     </div>
 
@@ -43,7 +56,7 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-xp">3 XP</span>
         <span class="acao-desc">+1 ao total de uma Reserva</span>
       </label>
-      <div class="acao-config" style="display:none">
+      <div class="acao-config" hidden>
         <select name="aprimorar_reserva">
           ${maxReservaOpts.map(r => `<option value="${r.id}">${r.nome} (${r.atual}/${r.total} → máx ${r.valor_maximo_permitido ?? 6})</option>`).join("") || '<option disabled>Todas no máximo</option>'}
         </select>
@@ -57,21 +70,21 @@ export function openInterludeDialog(actor) {
         <span class="acao-custo custo-gratis">Grátis</span>
         <span class="acao-desc">Recuperar 1 ponto de Reserva</span>
       </label>
-      <div class="acao-config" style="display:none">
+      <div class="acao-config" hidden>
         <select name="descansar_reserva">${reservaOpts(() => true)}</select>
       </div>
     </div>
 
     <div class="acao-item" data-acao="mudar">
       <label class="acao-header">
-        <input type="checkbox" name="acao" value="mudar" ${fatos.length === 0 ? "disabled" : ""}/>
+        <input type="checkbox" name="acao" value="mudar" ${fatosVisiveis.length === 0 ? "disabled" : ""}/>
         <span class="acao-nome">Mudar</span>
         <span class="acao-custo custo-gratis">Grátis</span>
         <span class="acao-desc">Reescrever um Fato existente</span>
       </label>
-      <div class="acao-config" style="display:none">
-        <select name="mudar_fato_idx">${fatoOpts}</select>
-        <input type="text" name="mudar_fato_texto" placeholder="Novo texto do Fato..." style="width:100%;margin-top:4px"/>
+      <div class="acao-config" hidden>
+        <select name="mudar_fato_id">${fatoOpts}</select>
+        <input type="text" name="mudar_fato_texto" placeholder="Novo texto do Fato..." />
       </div>
     </div>
 
@@ -87,25 +100,7 @@ export function openInterludeDialog(actor) {
   </div>
 
   <div class="xp-atual">XP atual: <strong id="xp-display">${system.xp.value}</strong></div>
-</div>
-
-<style>
-.fractal-interlude-dialog { display:flex; flex-direction:column; gap:8px; padding:4px; font-size:13px; }
-.interlude-hint { font-size:11px; color:#666; font-style:italic; margin:0; }
-.acoes-lista { display:flex; flex-direction:column; gap:4px; }
-.acao-item { border:1px solid #ddd; border-radius:4px; padding:6px 8px; }
-.acao-item:has(input:checked) { border-color:#8B0000; background:rgba(139,0,0,0.04); }
-.acao-header { display:flex; align-items:center; gap:8px; cursor:pointer; }
-.acao-nome { font-weight:bold; }
-.acao-custo { font-size:10px; padding:1px 5px; border-radius:8px; white-space:nowrap; }
-.custo-xp    { background:#fee; color:#c0392b; border:1px solid #fcc; }
-.custo-gratis { background:#efe; color:#27ae60; border:1px solid #cec; }
-.acao-desc { font-size:11px; color:#888; }
-.acao-config { margin-top:6px; }
-.acao-config select,
-.acao-config input[type=text] { width:100%; padding:3px 5px; border:1px solid #ccc; border-radius:3px; font-size:12px; }
-.xp-atual { font-size:11px; color:#888; text-align:right; }
-</style>`;
+</div>`;
 
   DialogV2.wait({
     window:      { title: "Interlúdio" },
@@ -118,7 +113,7 @@ export function openInterludeDialog(actor) {
         cb.addEventListener("change", () => {
           const acao   = cb.value;
           const config = el.querySelector(`.acao-item[data-acao="${acao}"] .acao-config`);
-          if (config) config.style.display = cb.checked ? "block" : "none";
+          if (config) config.hidden = !cb.checked;
 
           const total = el.querySelectorAll('input[name="acao"]:checked').length;
           el.querySelectorAll('input[name="acao"]:not(:checked)').forEach(i => { i.disabled = total >= 2; });
@@ -152,7 +147,7 @@ async function _executarInterlude(actor, el, reservas, fatos) {
 
   const fatosRestaurados = foundry.utils.deepClone(fatos).map(f => ({ ...f, rompido: false }));
   updates["system.fatos"] = fatosRestaurados;
-  if (fatos.some(f => f.rompido)) mensagens.push("🔄 Todos os Fatos rompidos foram restaurados.");
+  if (fatos.some(f => f.rompido)) mensagens.push("🔄 Todos os Fatos quebrados foram restaurados.");
 
   let novoXP = system.xp.value;
 
@@ -196,13 +191,14 @@ async function _executarInterlude(actor, el, reservas, fatos) {
     }
 
     if (acao === "mudar") {
-      const idx       = parseInt(el.querySelector('select[name="mudar_fato_idx"]')?.value ?? "-1");
+      const id        = el.querySelector('select[name="mudar_fato_id"]')?.value ?? "";
       const novoTexto = el.querySelector('input[name="mudar_fato_texto"]')?.value?.trim() ?? "";
       if (!novoTexto) { ui.notifications.warn("Escreva o novo texto do Fato para Mudar."); continue; }
       const fatos2 = updates["system.fatos"] ?? foundry.utils.deepClone(fatos);
-      if (fatos2[idx]) {
-        const anterior = fatos2[idx].texto;
-        fatos2[idx].texto = novoTexto;
+      const fato   = fatos2.find(f => f.id === id);
+      if (fato) {
+        const anterior = fato.texto;
+        fato.texto = novoTexto;
         updates["system.fatos"] = fatos2;
         mensagens.push(`✏️ Mudou Fato: "<em>${anterior || "?"}</em>" → "<em>${novoTexto}</em>"`);
       }

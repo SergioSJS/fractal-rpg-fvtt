@@ -1,0 +1,11 @@
+{
+  "name": "fractal-rpg-fvtt",
+  "private": true,
+  "description": "Fractal RPG system for Foundry VTT (dev tooling only)",
+  "scripts": {
+    "setup": "bash scripts/setup-dev.sh"
+  },
+  "devDependencies": {
+    "fvtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#main"
+  }
+}

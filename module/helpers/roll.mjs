@@ -6,7 +6,7 @@
  * - Sem Fatos: 1 dado, sucesso só no 6
  * - Sucesso: maior >= 5 (com Fatos) | maior = 6 (sem Fatos)
  * - Impulso: 2+ dados com 6 em um sucesso
- * - Ruptura: cada dado com 1 pode romper um Fato usado (jogador escolhe)
+ * - Ruptura: cada dado com 1 pode quebrar um Fato usado (jogador escolhe)
  * - Falha: +1 XP automático
  */
 export async function rolagemDeRisco(actor, fatosAplicados, temVantagem) {

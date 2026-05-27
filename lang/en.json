@@ -1,0 +1,116 @@
+{
+  "FRACTAL": {
+    "SystemName": "Fractal RPG",
+    "Sheet": {
+      "Personagem": "Character Sheet",
+      "Desafio": "Challenge Sheet",
+      "Grupo": "Group Sheet",
+      "XP": "XP",
+      "Reservas": "Pools",
+      "Fatos": "Facts",
+      "Anotacoes": "Notes"
+    },
+    "Fato": {
+      "Quebrado": "Broken",
+      "Predefinido": "Predefined",
+      "Placeholder": "Write the Fact...",
+      "AddBtn": "Add Fact",
+      "RemoveBtn": "Remove Fact",
+      "QuebrarBtn": "Break Fact",
+      "RestaurarBtn": "Restore Fact",
+      "RollBtn": "Roll this Fact"
+    },
+    "Obstaculo": {
+      "Singular": "Obstacle",
+      "Plural": "Obstacles",
+      "Quebrado": "Broken",
+      "Placeholder": "Write the Obstacle...",
+      "AddBtn": "Add Obstacle",
+      "RemoveBtn": "Remove Obstacle",
+      "QuebrarBtn": "Break Obstacle",
+      "RestaurarBtn": "Restore Obstacle"
+    },
+    "Reserva": {
+      "Atual": "Current",
+      "Total": "Total",
+      "Gatilho": "Trigger",
+      "Consequencia": "Consequence",
+      "SemReservas": "No pools configured."
+    },
+    "Roll": {
+      "Titulo": "Risk Roll",
+      "Sucesso": "SUCCESS",
+      "Falha": "FAILURE",
+      "Impulso": "BOOST",
+      "Ruptura": "BREAK",
+      "SemFatos": "(no Facts — success only on 6)",
+      "Maior": "Highest",
+      "Vantagem": "Advantage",
+      "XPGanho": "+1 XP from Failure",
+      "FatosAplicaveis": "Applicable Facts",
+      "Acao": "Describe the action",
+      "Rolar": "Roll Dice",
+      "DadosPreview": "Dice to roll"
+    },
+    "Interludio": {
+      "Titulo": "Interlude Actions",
+      "Evoluir": "Evolve (3 XP) — new Fact",
+      "Aprimorar": "Improve (3 XP) — +1 to a Pool",
+      "Descansar": "Rest — recover 1 Pool point",
+      "Mudar": "Change — rewrite a Fact",
+      "PrepararSe": "Prepare — +1 XP"
+    },
+    "Desafio": {
+      "Superado": "CHALLENGE OVERCOME",
+      "NotasArquiteto": "Architect's Notes",
+      "Obstaculos": "Obstacles",
+      "ObstaculosPadrao": "Default Obstacles"
+    },
+    "Settings": {
+      "ReservasMundo": {
+        "Nome": "World Pools",
+        "Dica": "Defines which Pools exist in this world. Reflected in all sheets."
+      },
+      "MenuFractal": {
+        "Nome": "Configure Fractal RPG",
+        "Label": "Open Panel",
+        "Dica": "Configure Character and Challenge Pools and sheet appearance."
+      },
+      "XPEpisodio": {
+        "Nome": "XP per Episode",
+        "Dica": "How many XP points the \"End of Episode\" macro grants each character in the world."
+      },
+      "XPArco": {
+        "Nome": "XP per Arc",
+        "Dica": "How many XP points the \"End of Arc\" macro grants each character in the world."
+      },
+      "ReservasAtualizadas": "World pools updated.",
+      "CSS": {
+        "Nome": "Custom CSS",
+        "Dica": "Globally injected CSS. Use .fractal-* classes as selectors."
+      },
+      "Background": {
+        "Nome": "Sheet Background",
+        "Dica": "URL or path to background image for character sheets."
+      }
+    }
+  },
+  "TYPES": {
+    "Actor": {
+      "personagem": "Character",
+      "desafio": "Challenge",
+      "grupo": "Group"
+    },
+    "Item": {
+      "fato": "Fact"
+    }
+  },
+  "ACTOR": {
+    "TypePersonagem": "Character",
+    "TypeDesafio": "Challenge",
+    "TypeGrupo": "Group"
+  },
+  "ITEM": {
+    "TypeFato": "Fact"
+  }
+}

@@ -124,7 +124,8 @@ export function registerSettings() {
   game.settings.register("fractal-rpg", "xpEpisodio", {
     scope:   "world",
     config:  true,
-    name:    "FRACTAL.Settings.XPEpisodio",
+    name:    "FRACTAL.Settings.XPEpisodio.Nome",
+    hint:    "FRACTAL.Settings.XPEpisodio.Dica",
     type:    Number,
     default: 3,
   });
@@ -132,7 +133,8 @@ export function registerSettings() {
   game.settings.register("fractal-rpg", "xpArco", {
     scope:   "world",
     config:  true,
-    name:    "FRACTAL.Settings.XPArco",
+    name:    "FRACTAL.Settings.XPArco.Nome",
+    hint:    "FRACTAL.Settings.XPArco.Dica",
     type:    Number,
     default: 10,
   });
