@@ -1,6 +1,7 @@
 import { openRollDialog } from "../helpers/roll-dialog.mjs";
 import { openInterludeDialog } from "../helpers/interlude.mjs";
 import { applySheetAppearance } from "../helpers/appearance.mjs";
+import { MAX_FATOS } from "../rules/risco.mjs";
 
 const { api, sheets } = foundry.applications;
 
@@ -28,6 +29,7 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
   };
 
   #selectedFatos = new Set();
+  #pendingFatoSave = Promise.resolve();
 
   get title() { return this.document.name; }
 
@@ -108,7 +110,9 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
           const fato = fatos.find(f => f.id === fatoId);
           if (fato) fato.texto = e.target.value;
         }
-        await this.actor.update({ "system.fatos": fatos });
+        // Blur do input dispara antes do clique em ◎; o toggle aguarda este save.
+        this.#pendingFatoSave = this.actor.update({ "system.fatos": fatos });
+        await this.#pendingFatoSave;
       });
     });
 
@@ -154,14 +158,21 @@ export class FractalActorSheet extends api.HandlebarsApplicationMixin(sheets.Act
   }
 
   static async #toggleSelecao(event, btn) {
-    const id   = btn.dataset.id;
+    await this.#pendingFatoSave;
+    const tipo = btn.dataset.tipo;
+    const id   = btn.dataset.id
+      || (tipo && this.actor.system.fatos.find(f => f.predefinido && f.tipo === tipo)?.id);
+    if (!id) {
+      ui.notifications.warn(game.i18n.localize("FRACTAL.Personagem.AvisoSemTexto"));
+      return;
+    }
     const fato = this.actor.system.fatos.find(f => f.id === id);
     if (!fato || fato.rompido) return;
     if (this.#selectedFatos.has(id)) {
       this.#selectedFatos.delete(id);
     } else {
-      if (this.#selectedFatos.size >= 3) {
-        ui.notifications.warn("Máximo de 3 Fatos por rolagem.");
+      if (this.#selectedFatos.size >= MAX_FATOS) {
+        ui.notifications.warn(game.i18n.format("FRACTAL.Personagem.AvisoMaxFatos", { max: MAX_FATOS }));
         return;
       }
       this.#selectedFatos.add(id);

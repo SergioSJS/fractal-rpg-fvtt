@@ -7,6 +7,7 @@ class FractalClockPanel {
   async render() {
     if (!game.actors) return;
 
+    const semNome = game.i18n.localize("FRACTAL.Comum.Reserva");
     const clocks = [];
     for (const actor of game.actors) {
       if (!["desafio", "grupo"].includes(actor.type)) continue;
@@ -30,11 +31,12 @@ class FractalClockPanel {
             actorName:   actor.name,
             reservaId:   def.id,
             reservaType: "world",
-            nome:        def.nome || "Reserva",
+            nome:        def.nome || semNome,
             atual:       vals.atual ?? 0,
             total:       vals.total ?? def.valor_inicial ?? 0,
             gatilho:     def.gatilho || "",
             accentColor,
+            canEdit:     actor.isOwner,
           });
         }
       }
@@ -47,11 +49,12 @@ class FractalClockPanel {
           actorName:   actor.name,
           reservaId:   r.id,
           reservaType: "custom",
-          nome:        r.nome || "Reserva",
+          nome:        r.nome || semNome,
           atual:       r.atual,
           total:       r.total,
           gatilho:     r.gatilho || "",
           accentColor,
+          canEdit:     actor.isOwner,
         });
       }
     }
@@ -88,7 +91,7 @@ class FractalClockPanel {
 
     const { actorId, reservaId, reservaType } = entry.dataset;
     const actor = game.actors.get(actorId);
-    if (!actor) return;
+    if (!actor?.isOwner) return;
 
     if (action === "unpin" && !(game.user?.isGM)) return;
 

@@ -16,36 +16,38 @@
         <span class="dado d6 {{#if (eq r 6)}}max{{/if}} {{#if (eq r 1)}}one{{/if}}">{{r}}</span>
       {{/each}}
       <span class="dado-sep">→</span>
-      <span class="dado-maior">maior: <strong>{{maior}}</strong></span>
+      <span class="dado-maior">{{localize "FRACTAL.Roll.Maior"}} <strong>{{maior}}</strong></span>
     </div>
 
     <div class="roll-badges">
       {{#if semFatos}}
-        <span class="roll-badge badge-sem-fatos">Sem Fatos — sucesso só no 6</span>
+        <span class="roll-badge badge-sem-fatos">{{localize "FRACTAL.Roll.SemFatos"}}</span>
       {{/if}}
       {{#if ehImpulso}}
-        <span class="roll-badge badge-impulso">⚡ Impulso</span>
+        <span class="roll-badge badge-impulso">{{localize "FRACTAL.Roll.ImpulsoBadge"}}</span>
       {{/if}}
-      {{#if rupturas}}
-        <span class="roll-badge badge-ruptura">💥 {{rupturas}} Ruptura{{#if (gt rupturas 1)}}s{{/if}}</span>
+      {{#if (gt rupturas 1)}}
+        <span class="roll-badge badge-ruptura">{{localize "FRACTAL.Roll.Rupturas" n=rupturas}}</span>
+      {{else if rupturas}}
+        <span class="roll-badge badge-ruptura">{{localize "FRACTAL.Roll.RupturaUma"}}</span>
       {{/if}}
       {{#if xpGanho}}
-        <span class="roll-badge badge-xp">+1 XP</span>
+        <span class="roll-badge badge-xp">{{localize "FRACTAL.Roll.XPGanho"}}</span>
       {{/if}}
     </div>
 
     {{#if rupturasPendentes}}
-      <div class="ruptura-pendente">⏳ Aguardando escolha de ruptura...</div>
+      <div class="ruptura-pendente">{{localize "FRACTAL.Roll.AguardandoRuptura"}}</div>
     {{/if}}
     {{#if fatosRompidos.length}}
       <div class="ruptura-lista">
-        Quebrou: {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
+        {{localize "FRACTAL.Roll.Quebrou"}} {{#each fatosRompidos}}"{{this}}"{{#unless @last}}, {{/unless}}{{/each}}
       </div>
     {{/if}}
 
     {{#if fatosNomes.length}}
       <div class="roll-fatos">
-        Fatos:
+        {{localize "FRACTAL.Roll.Fatos"}}
         {{#each fatosNomes}}<span class="fato-tag">{{this}}</span>{{/each}}
       </div>
     {{/if}}

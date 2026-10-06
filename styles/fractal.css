@@ -17,6 +17,14 @@
    tokens BASE — todo o resto se ajusta automaticamente.
    ═══════════════════════════════════════════════════ */
 
+/* "system" é uma layer nomeada do core (v13+): vence "applications" sem !important,
+   e o CSS customizado do GM (sem layer) continua vencendo tudo. */
+@layer system {
+
+/* Toda janela do sistema cabe na tela e rola por dentro. */
+.application.fractal-rpg { max-height: calc(100vh - 2rem); }
+.application.fractal-rpg .window-content { overflow-y: auto; }
+
 :root {
   /* ════════════════════════════════════════════════
      1) TOKENS BASE (sobrescrevíveis por presets)
@@ -1463,3 +1471,5 @@ body.theme-dark .fractal-cfg span,
 body.theme-dark .fractal-cfg p {
   color: inherit;
 }
+
+} /* @layer system */

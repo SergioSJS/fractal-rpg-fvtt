@@ -3,7 +3,8 @@
   "private": true,
   "description": "Fractal RPG system for Foundry VTT (dev tooling only)",
   "scripts": {
-    "setup": "bash scripts/setup-dev.sh"
+    "setup": "bash scripts/setup-dev.sh",
+    "test": "node --test tests/*.test.mjs"
   },
   "devDependencies": {
     "fvtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#main"

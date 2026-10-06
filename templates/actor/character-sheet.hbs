@@ -1,20 +1,23 @@
-<form class="fractal-sheet personagem flexcol" autocomplete="off">
+<div class="fractal-sheet personagem flexcol">
 
   <header class="sheet-header">
     <img class="actor-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
     <div class="header-fields">
       <div class="actor-name">
-        <input type="text" name="name" value="{{actor.name}}" placeholder="Nome do Personagem" />
+        <input type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'FRACTAL.Personagem.NomePh'}}" />
       </div>
       <div class="header-bottom">
         <div class="fractal-xp">
-          <label>XP</label>
+          <label>{{localize "FRACTAL.Sheet.XP"}}</label>
           <input type="number" name="system.xp.value" value="{{system.xp.value}}" min="0" />
         </div>
         <div class="header-btns">
-          <button type="button" class="btn-interlude" data-action="openInterlude">🌙 Interlúdio</button>
+          <button type="button" class="btn-interlude" data-action="openInterlude">{{localize "FRACTAL.Personagem.Interludio"}}</button>
           <button type="button" class="btn-roll {{#if selectedCount}}has-selection{{/if}}" data-action="openRollDialog">
-            <span class="btn-roll-icon">⚄</span> Rolar{{#if selectedCount}} ({{selectedCount}} fato{{#if (gt selectedCount 1)}}s{{/if}}){{/if}}
+            <span class="btn-roll-icon">⚄</span>
+            {{#if (gt selectedCount 1)}}{{localize "FRACTAL.Personagem.RolarFatos" n=selectedCount}}
+            {{else if selectedCount}}{{localize "FRACTAL.Personagem.RolarUmFato"}}
+            {{else}}{{localize "FRACTAL.Personagem.Rolar"}}{{/if}}
           </button>
         </div>
       </div>
@@ -23,7 +26,7 @@
 
   {{!-- RESERVAS --}}
   <section class="fractal-reservas">
-    <div class="section-title">Reservas</div>
+    <div class="section-title">{{localize "FRACTAL.Sheet.Reservas"}}</div>
     {{#if reservas.length}}
       <div class="reservas-grid">
         {{#each reservas as |res|}}
@@ -32,15 +35,15 @@
             <div class="fractal-reserva-tracker">
               {{#each res.tracker as |b|}}
                 {{#if b.filled}}
-                  <span class="bubble filled" data-action="decrementReserva" data-reserva-id="{{../id}}" title="Gastar">●</span>
+                  <span class="bubble filled" data-action="decrementReserva" data-reserva-id="{{../id}}" title="{{localize 'FRACTAL.Comum.Gastar'}}">●</span>
                 {{else}}
-                  <span class="bubble empty"  data-action="incrementReserva" data-reserva-id="{{../id}}" title="Recuperar">○</span>
+                  <span class="bubble empty"  data-action="incrementReserva" data-reserva-id="{{../id}}" title="{{localize 'FRACTAL.Comum.Recuperar'}}">○</span>
                 {{/if}}
               {{/each}}
               <span class="reserva-valor">{{res.atual}}/</span>
               {{#if ../editable}}
                 <input type="number" class="reserva-total-input" data-reserva-id="{{res.id}}"
-                  value="{{res.total}}" min="1" max="20" title="Máximo da reserva" />
+                  value="{{res.total}}" min="1" max="20" title="{{localize 'FRACTAL.Comum.MaximoReserva'}}" />
               {{else}}
                 <span class="reserva-valor">{{res.total}}</span>
               {{/if}}
@@ -52,16 +55,17 @@
         {{/each}}
       </div>
     {{else}}
-      <p class="empty-msg">Sem reservas — configure em <em>Configurações do Sistema → Fractal RPG</em>.</p>
+      <p class="empty-msg">{{{localize "FRACTAL.Personagem.SemReservas"}}}</p>
     {{/if}}
   </section>
 
   {{!-- FATOS --}}
   <section class="fractal-fatos">
     <div class="section-title">
-      Fatos
-      {{#if selectedCount}}<span class="fatos-hint">{{selectedCount}} marcado{{#if (gt selectedCount 1)}}s{{/if}} para rolar</span>{{/if}}
-      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
+      {{localize "FRACTAL.Sheet.Fatos"}}
+      {{#if (gt selectedCount 1)}}<span class="fatos-hint">{{localize "FRACTAL.Personagem.Marcados" n=selectedCount}}</span>
+      {{else if selectedCount}}<span class="fatos-hint">{{localize "FRACTAL.Personagem.MarcadoUm"}}</span>{{/if}}
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">{{localize "FRACTAL.Comum.Adicionar"}}</button>{{/if}}
     </div>
 
     {{#if system.fatos.length}}
@@ -70,15 +74,15 @@
           <li class="fractal-fato {{#if fato.rompido}}rompido{{/if}} {{#if fato.selected}}selected{{/if}} {{#if fato.predefinido}}predefinido{{/if}}">
 
             {{!-- Marcar para rolar (◎/◉) --}}
-            <button type="button" class="fato-sel-btn" data-action="toggleSelecao" data-id="{{fato.id}}"
-              title="{{#if fato.rompido}}Fato quebrado{{else if fato.selected}}Desmarcar{{else}}Marcar para rolar{{/if}}"
+            <button type="button" class="fato-sel-btn" data-action="toggleSelecao" data-id="{{fato.id}}" data-tipo="{{#unless fato.id}}{{fato.tipoLabel}}{{/unless}}"
+              title="{{#if fato.rompido}}{{localize 'FRACTAL.Personagem.FatoQuebrado'}}{{else if fato.selected}}{{localize 'FRACTAL.Personagem.Desmarcar'}}{{else}}{{localize 'FRACTAL.Personagem.MarcarRolar'}}{{/if}}"
               {{#if fato.rompido}}disabled{{/if}}>{{#if fato.rompido}}💥{{else if fato.selected}}◉{{else}}◎{{/if}}</button>
 
             {{!-- Texto + Label de tipo --}}
             <div class="fato-conteudo">
               {{#if fato.id}}
                 <input type="text" data-fato-id="{{fato.id}}" value="{{fato.texto}}"
-                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Escreva o Fato...{{/if}}"
+                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}{{localize 'FRACTAL.Comum.EscrevaFato'}}{{/if}}"
                   class="fato-texto" />
               {{else}}
                 <input type="text" data-predefinido-tipo="{{fato.tipoLabel}}" value="{{fato.texto}}"
@@ -90,26 +94,26 @@
             {{!-- Ações (só para fatos com id) --}}
             {{#if fato.id}}
               <button type="button" class="fato-roll-btn" data-action="rollEsseFato" data-id="{{fato.id}}"
-                title="Rolar só este Fato" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
+                title="{{localize 'FRACTAL.Personagem.RolarSoEste'}}" {{#if fato.rompido}}disabled{{/if}}>⚄</button>
               <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-                title="{{#if fato.rompido}}Restaurar Fato{{else}}Quebrar Fato{{/if}}">
+                title="{{#if fato.rompido}}{{localize 'FRACTAL.Comum.Restaurar'}}{{else}}{{localize 'FRACTAL.Comum.Quebrar'}}{{/if}}">
                 {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
               {{#unless fato.obrigatorio}}
-                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="{{localize 'FRACTAL.Comum.Remover'}}">🗑</button>
               {{/unless}}
             {{/if}}
           </li>
         {{/each}}
       </ul>
     {{else}}
-      <p class="empty-msg">Nenhum Fato. Clique em + para adicionar.</p>
+      <p class="empty-msg">{{localize "FRACTAL.Personagem.NenhumFato"}}</p>
     {{/if}}
   </section>
 
   {{!-- ANOTAÇÕES --}}
   <section class="fractal-anotacoes">
-    <div class="section-title">Anotações</div>
+    <div class="section-title">{{localize "FRACTAL.Sheet.Anotacoes"}}</div>
     <textarea name="system.anotacoes" rows="6" class="anotacoes-area" {{#unless editable}}disabled{{/unless}}>{{system.anotacoes}}</textarea>
   </section>
 
-</form>
+</div>

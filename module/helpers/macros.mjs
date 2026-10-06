@@ -1,35 +1,35 @@
 const MACROS = [
   {
-    name:    "Fractal — Fim de Episódio",
+    name:    "FRACTAL.Macro.FimEpisodio",
     flag:    "fim-episodio",
     command: `
 // Distribui XP de fim de episódio para todos os personagens do mundo.
-const xpPorEpisodio = game.settings.get("fractal-rpg", "xpEpisodio") ?? 3;
+const xp = game.settings.get("fractal-rpg", "xpEpisodio") ?? 3;
 const personagens = game.actors.filter(a => a.type === "personagem");
-if (!personagens.length) { ui.notifications.warn("Nenhum personagem encontrado."); return; }
+if (!personagens.length) { ui.notifications.warn(game.i18n.localize("FRACTAL.Macro.SemPersonagens")); return; }
 
 for (const actor of personagens) {
-  await actor.update({ "system.xp.value": actor.system.xp.value + xpPorEpisodio });
+  await actor.update({ "system.xp.value": actor.system.xp.value + xp });
 }
 ChatMessage.create({
-  content: \`🎬 <b>Fim de Episódio</b> — +\${xpPorEpisodio} XP para \${personagens.length} personagem(ns).\`
+  content: game.i18n.format("FRACTAL.Macro.MsgFimEpisodio", { xp, n: personagens.length })
 });
 `,
   },
   {
-    name:    "Fractal — Fim de Arco",
+    name:    "FRACTAL.Macro.FimArco",
     flag:    "fim-arco",
     command: `
 // Distribui XP de fim de arco para todos os personagens do mundo.
-const xpPorArco = game.settings.get("fractal-rpg", "xpArco") ?? 10;
+const xp = game.settings.get("fractal-rpg", "xpArco") ?? 10;
 const personagens = game.actors.filter(a => a.type === "personagem");
-if (!personagens.length) { ui.notifications.warn("Nenhum personagem encontrado."); return; }
+if (!personagens.length) { ui.notifications.warn(game.i18n.localize("FRACTAL.Macro.SemPersonagens")); return; }
 
 for (const actor of personagens) {
-  await actor.update({ "system.xp.value": actor.system.xp.value + xpPorArco });
+  await actor.update({ "system.xp.value": actor.system.xp.value + xp });
 }
 ChatMessage.create({
-  content: \`🏆 <b>Fim de Arco</b> — +\${xpPorArco} XP para \${personagens.length} personagem(ns)!\`
+  content: game.i18n.format("FRACTAL.Macro.MsgFimArco", { xp, n: personagens.length })
 });
 `,
   },
@@ -45,7 +45,7 @@ export async function setupMacros() {
     if (existing) await existing.delete();
 
     await Macro.create({
-      name:    def.name,
+      name:    game.i18n.localize(def.name),
       type:    "script",
       img:     "icons/svg/d20-black.svg",
       command: def.command.trim(),

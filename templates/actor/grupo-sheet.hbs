@@ -1,13 +1,13 @@
-<form class="fractal-sheet grupo flexcol" autocomplete="off">
+<div class="fractal-sheet grupo flexcol">
 
   <header class="sheet-header">
     <img class="actor-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" />
     <div class="header-fields">
       <div class="actor-name">
-        <input type="text" name="name" value="{{actor.name}}" placeholder="Nome do Grupo" />
+        <input type="text" name="name" value="{{actor.name}}" placeholder="{{localize 'FRACTAL.Grupo.NomePh'}}" />
       </div>
       <div class="header-bottom">
-        <input type="text" name="system.descricao" value="{{system.descricao}}" placeholder="Descrição do grupo..." class="desafio-tipo-input" />
+        <input type="text" name="system.descricao" value="{{system.descricao}}" placeholder="{{localize 'FRACTAL.Grupo.DescricaoPh'}}" class="desafio-tipo-input" />
       </div>
     </div>
   </header>
@@ -15,8 +15,8 @@
   {{!-- RESERVAS CUSTOM --}}
   <section class="fractal-reservas">
     <div class="section-title">
-      Reservas
-      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addCustomReserva">+ Reserva</button>{{/if}}
+      {{localize "FRACTAL.Sheet.Reservas"}}
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addCustomReserva">{{localize "FRACTAL.Comum.AdicionarReserva"}}</button>{{/if}}
     </div>
 
     {{#if reservasCustom.length}}
@@ -26,10 +26,10 @@
             {{#if ../editable}}
               <div class="custom-reserva-header">
                 <input type="text" class="custom-reserva-field reserva-nome-input" data-custom-id="{{res.id}}" data-field="nome"
-                  value="{{res.nome}}" placeholder="Nome" />
+                  value="{{res.nome}}" placeholder="{{localize 'FRACTAL.Comum.Nome'}}" />
                 {{#if ../isGM}}<button type="button" class="btn-pin-reserva {{#if res.pinnado}}pinnado{{/if}}"
-                  data-action="togglePin" data-custom-id="{{res.id}}" title="Pinnar no painel">📌</button>{{/if}}
-                <button type="button" class="btn-remove-custom" data-action="removeCustomReserva" data-custom-id="{{res.id}}" title="Remover">×</button>
+                  data-action="togglePin" data-custom-id="{{res.id}}" title="{{localize 'FRACTAL.Comum.Pinnar'}}">📌</button>{{/if}}
+                <button type="button" class="btn-remove-custom" data-action="removeCustomReserva" data-custom-id="{{res.id}}" title="{{localize 'FRACTAL.Comum.Remover'}}">×</button>
               </div>
             {{else}}
               <div class="reserva-nome">{{res.nome}}</div>
@@ -38,15 +38,15 @@
             <div class="fractal-reserva-tracker">
               {{#each res.tracker as |bubble|}}
                 {{#if bubble.filled}}
-                  <span class="bubble filled" data-action="decrementCustom" data-custom-id="{{../id}}" title="Gastar">●</span>
+                  <span class="bubble filled" data-action="decrementCustom" data-custom-id="{{../id}}" title="{{localize 'FRACTAL.Comum.Gastar'}}">●</span>
                 {{else}}
-                  <span class="bubble empty"  data-action="incrementCustom" data-custom-id="{{../id}}" title="Recuperar">○</span>
+                  <span class="bubble empty"  data-action="incrementCustom" data-custom-id="{{../id}}" title="{{localize 'FRACTAL.Comum.Recuperar'}}">○</span>
                 {{/if}}
               {{/each}}
               <span class="reserva-valor">{{res.atual}}/</span>
               {{#if ../editable}}
                 <input type="number" class="custom-reserva-field reserva-total-input" data-custom-id="{{res.id}}" data-field="total"
-                  value="{{res.total}}" min="1" max="10" title="Total máximo" />
+                  value="{{res.total}}" min="1" max="10" title="{{localize 'FRACTAL.Comum.TotalMaximo'}}" />
               {{else}}
                 <span class="reserva-valor">{{res.total}}</span>
               {{/if}}
@@ -54,7 +54,7 @@
 
             {{#if ../editable}}
               <input type="text" class="custom-reserva-field reserva-gatilho-input" data-custom-id="{{res.id}}" data-field="gatilho"
-                value="{{res.gatilho}}" placeholder="Gatilho..." />
+                value="{{res.gatilho}}" placeholder="{{localize 'FRACTAL.Comum.GatilhoPh'}}" />
             {{else if res.gatilho}}
               <div class="reserva-detalhe">✦ {{res.gatilho}}{{#if res.consequencia}} · {{res.consequencia}}{{/if}}</div>
             {{/if}}
@@ -62,15 +62,15 @@
         {{/each}}
       </div>
     {{else}}
-      <p class="empty-msg">Sem reservas. Clique em + para adicionar.</p>
+      <p class="empty-msg">{{localize "FRACTAL.Grupo.SemReservas"}}</p>
     {{/if}}
   </section>
 
   {{!-- FATOS --}}
   <section class="fractal-fatos">
     <div class="section-title">
-      Fatos
-      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">+ Adicionar</button>{{/if}}
+      {{localize "FRACTAL.Sheet.Fatos"}}
+      {{#if editable}}<button type="button" class="add-fato-btn" data-action="addFato">{{localize "FRACTAL.Comum.Adicionar"}}</button>{{/if}}
     </div>
     {{#if fatos.length}}
       <ul class="fatos-list">
@@ -79,7 +79,7 @@
             <div class="fato-conteudo">
               {{#if fato.id}}
                 <input type="text" data-fato-id="{{fato.id}}" value="{{fato.texto}}"
-                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}Fato do grupo...{{/if}}"
+                  placeholder="{{#if fato.tipoLabel}}{{fato.tipoLabel}}...{{else}}{{localize 'FRACTAL.Grupo.FatoPh'}}{{/if}}"
                   class="fato-texto" />
               {{else}}
                 <input type="text" data-predefinido-tipo="{{fato.tipoLabel}}" value="{{fato.texto}}"
@@ -89,26 +89,26 @@
             </div>
             {{#if fato.id}}
               <button type="button" class="fato-romper-btn" data-action="toggleRompido" data-id="{{fato.id}}"
-                title="{{#if fato.rompido}}Restaurar Fato{{else}}Quebrar Fato{{/if}}">
+                title="{{#if fato.rompido}}{{localize 'FRACTAL.Comum.Restaurar'}}{{else}}{{localize 'FRACTAL.Comum.Quebrar'}}{{/if}}">
                 {{#if fato.rompido}}↩{{else}}⊗{{/if}}</button>
               {{#unless fato.obrigatorio}}
-                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="Remover">🗑</button>
+                <button type="button" class="fato-del-btn" data-action="removeFato" data-id="{{fato.id}}" title="{{localize 'FRACTAL.Comum.Remover'}}">🗑</button>
               {{/unless}}
             {{/if}}
           </li>
         {{/each}}
       </ul>
     {{else}}
-      <p class="empty-msg">Nenhum Fato. Clique em + para adicionar.</p>
+      <p class="empty-msg">{{localize "FRACTAL.Grupo.NenhumFato"}}</p>
     {{/if}}
   </section>
 
   {{!-- NOTAS --}}
   {{#if owner}}
     <section class="fractal-anotacoes">
-      <div class="section-title">Notas</div>
+      <div class="section-title">{{localize "FRACTAL.Grupo.Notas"}}</div>
       <textarea name="system.notas" rows="5" class="anotacoes-area" {{#unless editable}}disabled{{/unless}}>{{system.notas}}</textarea>
     </section>
   {{/if}}
 
-</form>
+</div>

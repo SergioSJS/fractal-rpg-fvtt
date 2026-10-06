@@ -14,9 +14,11 @@
         {{#if c.gatilho}}<span class="clock-gatilho">{{c.gatilho}}</span>{{/if}}
       </div>
       <div class="clock-btns">
-        <button class="clock-btn clock-dec"   data-clock-action="dec"   title="Gastar">−</button>
-        <button class="clock-btn clock-inc"   data-clock-action="inc"   title="Recuperar">+</button>
-        {{#if isGM}}<button class="clock-btn clock-unpin" data-clock-action="unpin" title="Despinnar">×</button>{{/if}}
+        {{#if c.canEdit}}
+        <button class="clock-btn clock-dec"   data-clock-action="dec"   title="{{localize 'FRACTAL.Comum.Gastar'}}">−</button>
+        <button class="clock-btn clock-inc"   data-clock-action="inc"   title="{{localize 'FRACTAL.Comum.Recuperar'}}">+</button>
+        {{/if}}
+        {{#if @root.isGM}}<button class="clock-btn clock-unpin" data-clock-action="unpin" title="{{localize 'FRACTAL.Comum.Despinnar'}}">×</button>{{/if}}
       </div>
     </div>
   {{/each}}

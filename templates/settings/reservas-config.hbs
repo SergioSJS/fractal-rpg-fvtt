@@ -1,69 +1,47 @@
 <div class="fractal-cfg">
 
   <nav class="cfg-tabs">
-    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="0">Personagens</button>
-    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="1">Desafios</button>
-    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="2">Grupos</button>
-    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="3">Aparência</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="0">{{localize "FRACTAL.Config.AbaPersonagens"}}</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="1">{{localize "FRACTAL.Config.AbaDesafios"}}</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="2">{{localize "FRACTAL.Config.AbaGrupos"}}</button>
+    <button type="button" class="cfg-tab-btn" data-action="switchTab" data-tab-idx="3">{{localize "FRACTAL.Config.AbaAparencia"}}</button>
   </nav>
 
   <div class="cfg-content">
 
     {{!-- PERSONAGENS --}}
     <div class="cfg-tab-body" data-cfg-tab="personagens">
-      <p class="cfg-hint">Reservas visíveis nas fichas de personagem. Recomendado: 2–4. Gatilho = quando perde; Consequência = ao zerar.</p>
+      <p class="cfg-hint">{{localize "FRACTAL.Config.DicaPersonagens"}}</p>
       <div class="preset-bar">
-        <span>Pré-configuração:</span>
+        <span>{{localize "FRACTAL.Config.PreConfig"}}</span>
         <select class="preset-select" data-target="personagens">
-          <option value="">— Escolher —</option>
+          <option value="">{{localize "FRACTAL.Config.Escolher"}}</option>
           {{#each presetOpts as |p|}}
             <option value="{{p.key}}">{{p.nome}}</option>
           {{/each}}
         </select>
       </div>
-      <div class="reservas-header">
-        <span class="col-nome">Nome</span>
-        <span class="col-num">Inic.</span>
-        <span class="col-num">Máx.</span>
-        <span class="col-texto">Gatilho</span>
-        <span class="col-texto">Consequência</span>
-        <span style="width:28px"></span>
-      </div>
+      {{> "systems/fractal-rpg/templates/settings/reservas-header.hbs"}}
       <div class="reservas-list" data-target="reservasPersonagem">
         {{#each reservasPersonagem as |r|}}
-          <div class="reserva-row">
-            <input type="hidden" data-field="id"          value="{{r.id}}" />
-            <input type="text"   data-field="nome"         value="{{r.nome}}"                  placeholder="Nome"         class="col-nome" />
-            <input type="number" data-field="vinicial"     value="{{r.valor_inicial}}"          min="1" max="6"            class="col-num"  />
-            <input type="number" data-field="vmax"         value="{{r.valor_maximo_permitido}}" min="1" max="10"           class="col-num"  />
-            <input type="text"   data-field="gatilho"      value="{{r.gatilho}}"               placeholder="Gatilho"      class="col-texto"/>
-            <input type="text"   data-field="consequencia" value="{{r.consequencia}}"           placeholder="Consequência" class="col-texto"/>
-            <button type="button" class="btn-remove-row" data-action="removeReserva" title="Remover">×</button>
-          </div>
+          {{> "systems/fractal-rpg/templates/settings/reserva-row.hbs" r=r}}
         {{/each}}
       </div>
-      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasPersonagem">+ Adicionar Reserva</button>
+      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasPersonagem">{{localize "FRACTAL.Config.AdicionarReserva"}}</button>
 
       <div class="cfg-subsection">
-        <div class="cfg-subsection-title">Fatos Padrão</div>
-        <p class="cfg-hint">Tipos de fato que sempre aparecem nas fichas de personagem. Fatos obrigatórios não podem ser removidos pelos jogadores.</p>
+        <div class="cfg-subsection-title">{{localize "FRACTAL.Config.FatosPadrao"}}</div>
+        <p class="cfg-hint">{{localize "FRACTAL.Config.DicaFatosPersonagem"}}</p>
         <div class="fatos-list" data-target="fatosPersonagem">
           {{#each fatosPersonagem as |f|}}
-            <div class="fato-padrao-row">
-              <input type="hidden" data-field="id"   value="{{f.id}}" />
-              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Ancestralidade, Classe...)" class="col-tipo" />
-              <label class="col-obrig">
-                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
-              </label>
-              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
-            </div>
+            {{> "systems/fractal-rpg/templates/settings/fato-padrao-row.hbs" f=f placeholder=(localize "FRACTAL.Config.TipoFatoPh")}}
           {{/each}}
         </div>
-        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosPersonagem">+ Adicionar Tipo de Fato</button>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosPersonagem">{{localize "FRACTAL.Config.AdicionarTipoFato"}}</button>
       </div>
 
       <div class="cfg-field">
-        <label>Cor de destaque (Personagem)</label>
+        <label>{{localize "FRACTAL.Config.CorPersonagem"}}</label>
         <div class="cor-row">
           <input type="color" id="cor-picker" value="{{corAccent}}" />
           <input type="text"  id="cor-text"   value="{{corAccent}}" placeholder="#8B0000" maxlength="7" class="cor-text-input" />
@@ -71,10 +49,10 @@
       </div>
 
       <div class="cfg-field">
-        <label>Background das fichas de Personagem</label>
-        <input type="text" data-field="bgPersonagem" value="{{backgroundPersonagem}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg.jpg" />
+        <label>{{localize "FRACTAL.Config.BgPersonagem"}}</label>
+        <input type="text" data-field="bgPersonagem" value="{{backgroundPersonagem}}" placeholder="{{localize 'FRACTAL.Config.BgPh'}}" />
         <div class="opacity-row">
-          <label class="opacity-label">Opacidade:</label>
+          <label class="opacity-label">{{localize "FRACTAL.Config.Opacidade"}}</label>
           <input type="range" data-field="bgOpacidadePersonagem" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadePersonagem}}" />
           <span class="opacity-val">{{bgOpacidadePersonagem}}</span>
         </div>
@@ -83,59 +61,37 @@
 
     {{!-- DESAFIOS --}}
     <div class="cfg-tab-body" data-cfg-tab="desafios">
-      <p class="cfg-hint">Reservas das fichas de Desafio (criaturas, obstáculos, cenas de tensão).</p>
+      <p class="cfg-hint">{{localize "FRACTAL.Config.DicaDesafios"}}</p>
       <div class="preset-bar">
-        <span>Pré-configuração:</span>
+        <span>{{localize "FRACTAL.Config.PreConfig"}}</span>
         <select class="preset-select" data-target="desafios">
-          <option value="">— Escolher —</option>
+          <option value="">{{localize "FRACTAL.Config.Escolher"}}</option>
           {{#each presetOpts as |p|}}
             <option value="{{p.key}}">{{p.nome}}</option>
           {{/each}}
         </select>
       </div>
-      <div class="reservas-header">
-        <span class="col-nome">Nome</span>
-        <span class="col-num">Inic.</span>
-        <span class="col-num">Máx.</span>
-        <span class="col-texto">Gatilho</span>
-        <span class="col-texto">Consequência</span>
-        <span style="width:28px"></span>
-      </div>
+      {{> "systems/fractal-rpg/templates/settings/reservas-header.hbs"}}
       <div class="reservas-list" data-target="reservasDesafio">
         {{#each reservasDesafio as |r|}}
-          <div class="reserva-row">
-            <input type="hidden" data-field="id"          value="{{r.id}}" />
-            <input type="text"   data-field="nome"         value="{{r.nome}}"                  placeholder="Nome"         class="col-nome" />
-            <input type="number" data-field="vinicial"     value="{{r.valor_inicial}}"          min="1" max="6"            class="col-num"  />
-            <input type="number" data-field="vmax"         value="{{r.valor_maximo_permitido}}" min="1" max="10"           class="col-num"  />
-            <input type="text"   data-field="gatilho"      value="{{r.gatilho}}"               placeholder="Gatilho"      class="col-texto"/>
-            <input type="text"   data-field="consequencia" value="{{r.consequencia}}"           placeholder="Consequência" class="col-texto"/>
-            <button type="button" class="btn-remove-row" data-action="removeReserva" title="Remover">×</button>
-          </div>
+          {{> "systems/fractal-rpg/templates/settings/reserva-row.hbs" r=r}}
         {{/each}}
       </div>
-      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasDesafio">+ Adicionar Reserva</button>
+      <button type="button" class="btn-add-row" data-action="addReserva" data-target="reservasDesafio">{{localize "FRACTAL.Config.AdicionarReserva"}}</button>
 
       <div class="cfg-subsection">
-        <div class="cfg-subsection-title">Obstáculos Padrão</div>
-        <p class="cfg-hint">Tipos de Obstáculo que sempre aparecem nas fichas de Desafio (no SRD v1.0.2 os componentes do Desafio chamam-se Obstáculos).</p>
+        <div class="cfg-subsection-title">{{localize "FRACTAL.Config.ObstaculosPadrao"}}</div>
+        <p class="cfg-hint">{{localize "FRACTAL.Config.DicaObstaculos"}}</p>
         <div class="fatos-list" data-target="fatosDesafio">
           {{#each fatosDesafio as |f|}}
-            <div class="fato-padrao-row">
-              <input type="hidden" data-field="id"   value="{{f.id}}" />
-              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Natureza, Fraqueza...)" class="col-tipo" />
-              <label class="col-obrig">
-                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
-              </label>
-              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
-            </div>
+            {{> "systems/fractal-rpg/templates/settings/fato-padrao-row.hbs" f=f placeholder=(localize "FRACTAL.Config.TipoObstaculoPh")}}
           {{/each}}
         </div>
-        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosDesafio">+ Adicionar Tipo de Obstáculo</button>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosDesafio">{{localize "FRACTAL.Config.AdicionarTipoObstaculo"}}</button>
       </div>
 
       <div class="cfg-field">
-        <label>Cor de destaque (Desafio)</label>
+        <label>{{localize "FRACTAL.Config.CorDesafio"}}</label>
         <div class="cor-row">
           <input type="color" id="cor-picker-desafio" value="{{corAccentDesafio}}" />
           <input type="text"  id="cor-text-desafio"   value="{{corAccentDesafio}}" placeholder="#5c3317" maxlength="7" class="cor-text-input" />
@@ -143,10 +99,10 @@
       </div>
 
       <div class="cfg-field">
-        <label>Background das fichas de Desafio</label>
-        <input type="text" data-field="bgDesafio" value="{{backgroundDesafio}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg-desafio.jpg" />
+        <label>{{localize "FRACTAL.Config.BgDesafio"}}</label>
+        <input type="text" data-field="bgDesafio" value="{{backgroundDesafio}}" placeholder="{{localize 'FRACTAL.Config.BgPh'}}" />
         <div class="opacity-row">
-          <label class="opacity-label">Opacidade:</label>
+          <label class="opacity-label">{{localize "FRACTAL.Config.Opacidade"}}</label>
           <input type="range" data-field="bgOpacidadeDesafio" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadeDesafio}}" />
           <span class="opacity-val">{{bgOpacidadeDesafio}}</span>
         </div>
@@ -155,11 +111,11 @@
 
     {{!-- GRUPOS --}}
     <div class="cfg-tab-body" data-cfg-tab="grupos">
-      <p class="cfg-hint">Configurações das fichas de Grupo.</p>
+      <p class="cfg-hint">{{localize "FRACTAL.Config.DicaGrupos"}}</p>
       <div class="preset-bar">
-        <span>Pré-configuração:</span>
+        <span>{{localize "FRACTAL.Config.PreConfig"}}</span>
         <select class="preset-select" data-target="grupos">
-          <option value="">— Escolher —</option>
+          <option value="">{{localize "FRACTAL.Config.Escolher"}}</option>
           {{#each presetOpts as |p|}}
             <option value="{{p.key}}">{{p.nome}}</option>
           {{/each}}
@@ -167,25 +123,18 @@
       </div>
 
       <div class="cfg-subsection">
-        <div class="cfg-subsection-title">Fatos Padrão</div>
-        <p class="cfg-hint">Tipos de fato que sempre aparecem nas fichas de grupo.</p>
+        <div class="cfg-subsection-title">{{localize "FRACTAL.Config.FatosPadrao"}}</div>
+        <p class="cfg-hint">{{localize "FRACTAL.Config.DicaFatosGrupo"}}</p>
         <div class="fatos-list" data-target="fatosGrupo">
           {{#each fatosGrupo as |f|}}
-            <div class="fato-padrao-row">
-              <input type="hidden" data-field="id"   value="{{f.id}}" />
-              <input type="text"   data-field="tipo"  value="{{f.tipo}}" placeholder="Tipo (ex: Objetivo do Grupo...)" class="col-tipo" />
-              <label class="col-obrig">
-                <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> Obrigatório
-              </label>
-              <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
-            </div>
+            {{> "systems/fractal-rpg/templates/settings/fato-padrao-row.hbs" f=f placeholder=(localize "FRACTAL.Config.TipoGrupoPh")}}
           {{/each}}
         </div>
-        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosGrupo">+ Adicionar Tipo de Fato</button>
+        <button type="button" class="btn-add-row" data-action="addFatoPadrao" data-target="fatosGrupo">{{localize "FRACTAL.Config.AdicionarTipoFato"}}</button>
       </div>
 
       <div class="cfg-field">
-        <label>Cor de destaque (Grupo)</label>
+        <label>{{localize "FRACTAL.Config.CorGrupo"}}</label>
         <div class="cor-row">
           <input type="color" id="cor-picker-grupo" value="{{corAccentGrupo}}" />
           <input type="text"  id="cor-text-grupo"   value="{{corAccentGrupo}}" placeholder="#0d5c2e" maxlength="7" class="cor-text-input" />
@@ -193,10 +142,10 @@
       </div>
 
       <div class="cfg-field">
-        <label>Background das fichas de Grupo</label>
-        <input type="text" data-field="bgGrupo" value="{{backgroundGrupo}}" placeholder="URL ou caminho: worlds/meu-mundo/img/bg-grupo.jpg" />
+        <label>{{localize "FRACTAL.Config.BgGrupo"}}</label>
+        <input type="text" data-field="bgGrupo" value="{{backgroundGrupo}}" placeholder="{{localize 'FRACTAL.Config.BgPh'}}" />
         <div class="opacity-row">
-          <label class="opacity-label">Opacidade:</label>
+          <label class="opacity-label">{{localize "FRACTAL.Config.Opacidade"}}</label>
           <input type="range" data-field="bgOpacidadeGrupo" class="opacity-slider" min="0.05" max="1" step="0.05" value="{{bgOpacidadeGrupo}}" />
           <span class="opacity-val">{{bgOpacidadeGrupo}}</span>
         </div>
@@ -208,14 +157,10 @@
 
       <div class="cfg-field">
         <div class="css-label-row">
-          <label>CSS Customizado</label>
-          <button type="button" class="btn-css-default" data-action="loadDefaultCss">↺ Carregar padrão</button>
+          <label>{{localize "FRACTAL.Config.CSS"}}</label>
+          <button type="button" class="btn-css-default" data-action="loadDefaultCss">{{localize "FRACTAL.Config.CarregarPadrao"}}</button>
         </div>
-        <p class="cfg-hint css-instructions">
-          Escreva CSS puro aplicado sobre as fichas. Use as variáveis <code>:root</code> para mudar cores globalmente,
-          ou selecione elementos com <code>.fractal-sheet</code>, <code>.fractal-reserva-card</code>, <code>.fractal-fato</code>, etc.
-          O CSS é injetado em <code>&lt;style&gt;</code> no &lt;head&gt; ao salvar.
-        </p>
+        <p class="cfg-hint css-instructions">{{{localize "FRACTAL.Config.DicaCSS"}}}</p>
         <textarea data-field="css" rows="14" class="css-area">{{cssCustomizado}}</textarea>
       </div>
 
@@ -223,8 +168,8 @@
   </div>
 
   <footer class="cfg-footer">
-    <button type="button" data-action="closeConfig">Cancelar</button>
-    <button type="button" data-action="saveConfig"><i class="fas fa-save"></i> Salvar</button>
+    <button type="button" data-action="closeConfig">{{localize "FRACTAL.Comum.Cancelar"}}</button>
+    <button type="button" data-action="saveConfig"><i class="fas fa-save"></i> {{localize "FRACTAL.Config.Salvar"}}</button>
   </footer>
 
 </div>

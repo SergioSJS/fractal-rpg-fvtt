@@ -142,7 +142,7 @@ export class FractalGrupoSheet extends api.HandlebarsApplicationMixin(sheets.Act
   static async #addCustomReserva() {
     const reservasCustom = foundry.utils.deepClone(this.actor.system.reservasCustom ?? []);
     reservasCustom.push({
-      id: foundry.utils.randomID(), nome: "Reserva", atual: 3, total: 3,
+      id: foundry.utils.randomID(), nome: game.i18n.localize("FRACTAL.Comum.Reserva"), atual: 3, total: 3,
       gatilho: "", consequencia: "", pinnado: false,
     });
     await this.actor.update({ "system.reservasCustom": reservasCustom });

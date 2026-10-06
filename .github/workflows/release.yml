@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*.*.*'
+  # O push da tag nem sempre dispara o evento; rodar à mão com: gh workflow run release.yml -f tag=vX.Y.Z
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag existente (ex.: v0.5.0)"
+        required: true
 
 permissions:
   contents: write
@@ -11,32 +17,45 @@ permissions:
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.inputs.tag || github.ref_name }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
 
-      - name: Extract version
-        id: version
-        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-      - name: Update system.json
+      - name: Test
         run: |
-          DOWNLOAD="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/fractal-rpg.zip"
-          jq --arg ver "${{ steps.version.outputs.VERSION }}" \
-             --arg dl "$DOWNLOAD" \
-             '.version = $ver | .download = $dl' \
+          npm install --prefix /tmp/hb --no-save handlebars@4
+          NODE_PATH=/tmp/hb/node_modules npm test
+
+      # manifest/download só existem no manifesto publicado: no repositório eles fariam o
+      # Foundry oferecer "Update" para a cópia de desenvolvimento e sobrescrever o repo.
+      - name: Inject version, manifest and download
+        run: |
+          REPO="https://github.com/${{ github.repository }}"
+          jq --arg ver "${TAG#v}" \
+             --arg man "$REPO/releases/latest/download/system.json" \
+             --arg dl  "$REPO/releases/download/$TAG/fractal-rpg.zip" \
+             '.version = $ver | .manifest = $man | .download = $dl' \
              system.json > system.tmp.json && mv system.tmp.json system.json
 
       - name: Build release zip
         run: |
           zip -r fractal-rpg.zip \
-            module/ templates/ lang/ \
-            styles/fractal.css \
-            system.json
+            system.json module/ templates/ lang/ packs/ \
+            styles/fractal.css LICENSE README.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.TAG }}
           files: |
             fractal-rpg.zip
             system.json

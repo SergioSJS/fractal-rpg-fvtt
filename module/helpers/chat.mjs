@@ -15,9 +15,9 @@ function _buildTemplateData(actor, rollResult, acao, fatosNomes, rupturasPendent
     fatosNomes,
     semFatos,
     xpGanho:        tipoResultado === "falha",
-    labelResultado: tipoResultado === "sucesso"
-      ? (ehImpulso ? "⚡ IMPULSO" : "✅ SUCESSO")
-      : "❌ FALHA",
+    labelResultado: game.i18n.localize(tipoResultado === "sucesso"
+      ? (ehImpulso ? "FRACTAL.Roll.Impulso" : "FRACTAL.Roll.Sucesso")
+      : "FRACTAL.Roll.Falha"),
   };
 }
 
@@ -28,23 +28,17 @@ export async function createRollMessage(actor, rollResult, acao, fatosNomes) {
 
   // Criar a mensagem via ChatMessage.create para poder atualizar o content depois
   const speaker  = ChatMessage.getSpeaker({ actor });
-  const rollMode = game.settings.get("core", "rollMode");
 
-  let msgData = {
+  const msgData = {
     speaker,
     content,
     rolls:   [rollResult.roll],
     sound:   CONFIG.sounds.dice,
   };
 
-  // Aplicar rollMode (blind, gmroll, etc.)
-  if (rollMode === CONST.DICE_ROLL_MODES.BLIND) {
-    msgData.blind = true;
-  } else if (rollMode === CONST.DICE_ROLL_MODES.PRIVATE) {
-    msgData.whisper = ChatMessage.getWhisperRecipients("gm");
-  } else if (rollMode === CONST.DICE_ROLL_MODES.SELF) {
-    msgData.whisper = [game.user.id];
-  }
+  // v14 trocou rollMode por messageMode; o caminho antigo só emite aviso de depreciação.
+  if (ChatMessage.applyMode) ChatMessage.applyMode(msgData, game.settings.get("core", "messageMode"));
+  else ChatMessage.applyRollMode(msgData, game.settings.get("core", "rollMode"));
 
   const msg = await ChatMessage.create(msgData);
   return { msg, templateData };

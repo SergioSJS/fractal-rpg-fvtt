@@ -165,7 +165,7 @@ export function injectCustomCSS(css) {
 }
 
 function _reRenderSheetsByType(type) {
-  for (const app of Object.values(ui.windows ?? {})) {
-    if (app.document?.type === type) app.render(false);
+  for (const app of foundry.applications.instances.values()) {
+    if (app.document?.type === type) app.render();
   }
 }

@@ -1,0 +1,8 @@
+<div class="fato-padrao-row">
+  <input type="hidden" data-field="id"   value="{{f.id}}" />
+  <input type="text"   data-field="tipo" value="{{f.tipo}}" placeholder="{{placeholder}}" class="col-tipo" />
+  <label class="col-obrig">
+    <input type="checkbox" data-field="obrigatorio" {{#if f.obrigatorio}}checked{{/if}} /> {{localize "FRACTAL.Config.Obrigatorio"}}
+  </label>
+  <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="{{localize 'FRACTAL.Comum.Remover'}}">×</button>
+</div>

@@ -36,6 +36,7 @@ async function loadPresets() {
   if (_presetsCache) return _presetsCache;
   try {
     const resp = await fetch("systems/fractal-rpg/packs/presets.json");
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
     _presetsCache = await resp.json();
   } catch (e) {
     console.error("Fractal RPG | Falha ao carregar presets.json", e);
@@ -44,10 +45,29 @@ async function loadPresets() {
   return _presetsCache;
 }
 
+const ROW_RESERVA = "systems/fractal-rpg/templates/settings/reserva-row.hbs";
+const ROW_FATO    = "systems/fractal-rpg/templates/settings/fato-padrao-row.hbs";
+const TIPO_PH = {
+  fatosPersonagem: "FRACTAL.Config.TipoFatoPh",
+  fatosDesafio:    "FRACTAL.Config.TipoObstaculoPh",
+  fatosGrupo:      "FRACTAL.Config.TipoGrupoPh",
+};
+
+const render = (path, data) => foundry.applications.handlebars.renderTemplate(path, data);
+const rowReserva = r => render(ROW_RESERVA, { r });
+const rowFato    = (target, f) => render(ROW_FATO, { f, placeholder: game.i18n.localize(TIPO_PH[target] ?? "FRACTAL.Config.TipoPh") });
+
+export const CONFIG_PARTIALS = [
+  "systems/fractal-rpg/templates/settings/reservas-header.hbs",
+  ROW_RESERVA,
+  ROW_FATO,
+];
+
 export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.ApplicationV2) {
   static DEFAULT_OPTIONS = {
     id:       "fractal-reservas-config",
-    window:   { title: "Fractal RPG — Configurações", resizable: true },
+    classes:  ["fractal-rpg"],
+    window:   { title: "FRACTAL.Config.Titulo", resizable: true },
     position: { width: 960, height: 640 },
     actions: {
       addReserva:      ReservasConfigApp._addReserva,
@@ -111,7 +131,7 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
         const presets = await loadPresets();
         const preset  = presets[key];
         if (!preset) return;
-        this._fillFromPreset(target, preset);
+        await this._fillFromPreset(target, preset);
         // Mantém a opção selecionada visível como confirmação. Para re-aplicar
         // o mesmo preset, o usuário escolhe outra opção (incl. "— Escolher —") e volta.
       });
@@ -145,18 +165,18 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     bodies.forEach((t, i) => { t.style.setProperty("display", i === idx ? "flex" : "none", "important"); });
   }
 
-  _fillFromPreset(target, preset) {
+  async _fillFromPreset(target, preset) {
     // target: "personagens" | "desafios" | "grupos"
     // Todos os presets também aplicam cor e CSS
     this._fillAparencia(preset);
     if (target === "personagens") {
-      this._fillReservas("reservasPersonagem", preset.reservasPersonagem ?? []);
-      this._fillFatosPadrao("fatosPersonagem", preset.fatosPersonagem ?? []);
+      await this._fillReservas("reservasPersonagem", preset.reservasPersonagem ?? []);
+      await this._fillFatosPadrao("fatosPersonagem", preset.fatosPersonagem ?? []);
     } else if (target === "desafios") {
-      this._fillReservas("reservasDesafio", preset.reservasDesafio ?? []);
-      this._fillFatosPadrao("fatosDesafio", preset.fatosDesafio ?? []);
+      await this._fillReservas("reservasDesafio", preset.reservasDesafio ?? []);
+      await this._fillFatosPadrao("fatosDesafio", preset.fatosDesafio ?? []);
     } else if (target === "grupos") {
-      this._fillFatosPadrao("fatosGrupo", preset.fatosGrupo ?? []);
+      await this._fillFatosPadrao("fatosGrupo", preset.fatosGrupo ?? []);
     }
   }
 
@@ -180,18 +200,18 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     }
   }
 
-  _fillReservas(dataTarget, reservas) {
+  async _fillReservas(dataTarget, reservas) {
     const list = this.element.querySelector(`.reservas-list[data-target="${dataTarget}"]`);
     if (!list) return;
-    list.innerHTML = "";
-    reservas.forEach((r, idx) => list.insertAdjacentHTML("beforeend", _rowHtml(dataTarget, idx, r)));
+    const html = await Promise.all(reservas.map(rowReserva));
+    list.innerHTML = html.join("");
   }
 
-  _fillFatosPadrao(dataTarget, fatos) {
+  async _fillFatosPadrao(dataTarget, fatos) {
     const list = this.element.querySelector(`.fatos-list[data-target="${dataTarget}"]`);
     if (!list) return;
-    list.innerHTML = "";
-    fatos.forEach(f => list.insertAdjacentHTML("beforeend", _fatoRowHtml(f)));
+    const html = await Promise.all(fatos.map(f => rowFato(dataTarget, f)));
+    list.innerHTML = html.join("");
   }
 
   // ─── Actions ───────────────────────────────────────────────────
@@ -212,12 +232,11 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     if (area) area.value = DEFAULT_CSS;
   }
 
-  static _addReserva(event, btn) {
+  static async _addReserva(event, btn) {
     const target = btn.dataset.target;
     const list   = this.element.querySelector(`.reservas-list[data-target="${target}"]`);
     if (!list) return;
-    const idx    = list.querySelectorAll(".reserva-row").length;
-    list.insertAdjacentHTML("beforeend", _rowHtml(target, idx, {
+    list.insertAdjacentHTML("beforeend", await rowReserva({
       nome: "", valor_inicial: 3, valor_maximo_permitido: 6, gatilho: "", consequencia: "",
     }));
     list.querySelector(".reserva-row:last-child .col-nome")?.focus();
@@ -227,11 +246,11 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     btn.closest(".reserva-row")?.remove();
   }
 
-  static _addFatoPadrao(event, btn) {
+  static async _addFatoPadrao(event, btn) {
     const target = btn.dataset.target;
     const list   = this.element.querySelector(`.fatos-list[data-target="${target}"]`);
     if (!list) return;
-    list.insertAdjacentHTML("beforeend", _fatoRowHtml({ tipo: "", obrigatorio: false }));
+    list.insertAdjacentHTML("beforeend", await rowFato(target, { tipo: "", obrigatorio: false }));
     list.querySelector(".fato-padrao-row:last-child .col-tipo")?.focus();
   }
 
@@ -269,9 +288,13 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     const bgP   = el.querySelector('[data-field="bgPersonagem"]')?.value?.trim()          ?? "";
     const bgD   = el.querySelector('[data-field="bgDesafio"]')?.value?.trim()             ?? "";
     const bgG   = el.querySelector('[data-field="bgGrupo"]')?.value?.trim()               ?? "";
-    const opacP = parseFloat(el.querySelector('[data-field="bgOpacidadePersonagem"]')?.value) || 0.25;
-    const opacD = parseFloat(el.querySelector('[data-field="bgOpacidadeDesafio"]')?.value)    || 0.25;
-    const opacG = parseFloat(el.querySelector('[data-field="bgOpacidadeGrupo"]')?.value)      || 0.25;
+    const readOpac = (field) => {
+      const v = parseFloat(el.querySelector(`[data-field="${field}"]`)?.value);
+      return Number.isFinite(v) ? v : 0.25;
+    };
+    const opacP = readOpac("bgOpacidadePersonagem");
+    const opacD = readOpac("bgOpacidadeDesafio");
+    const opacG = readOpac("bgOpacidadeGrupo");
     const css   = el.querySelector('[data-field="css"]')?.value                           ?? "";
 
     await game.settings.set("fractal-rpg", "reservasPersonagem",    readReservas("reservasPersonagem"));
@@ -290,33 +313,8 @@ export class ReservasConfigApp extends api.HandlebarsApplicationMixin(api.Applic
     await game.settings.set("fractal-rpg", "bgOpacidadeGrupo",       opacG);
     await game.settings.set("fractal-rpg", "cssCustomizado",         css);
 
-    ui.notifications.info("Configurações do Fractal RPG salvas.");
+    ui.notifications.info(game.i18n.localize("FRACTAL.Config.Salvo"));
     this.close();
   }
 }
 
-function _rowHtml(target, idx, r) {
-  const id  = r.id || "";
-  const esc = (v) => String(v ?? "").replace(/"/g, "&quot;");
-  return `<div class="reserva-row">
-    <input type="hidden" data-field="id"          value="${esc(id)}" />
-    <input type="text"   data-field="nome"         value="${esc(r.nome)}"                  placeholder="Nome"         class="col-nome" />
-    <input type="number" data-field="vinicial"     value="${r.valor_inicial ?? 3}"          min="1" max="6"            class="col-num"  />
-    <input type="number" data-field="vmax"         value="${r.valor_maximo_permitido ?? 6}" min="1" max="10"           class="col-num"  />
-    <input type="text"   data-field="gatilho"      value="${esc(r.gatilho)}"               placeholder="Gatilho"      class="col-texto"/>
-    <input type="text"   data-field="consequencia" value="${esc(r.consequencia)}"           placeholder="Consequência" class="col-texto"/>
-    <button type="button" class="btn-remove-row" data-action="removeReserva" title="Remover">×</button>
-  </div>`;
-}
-
-function _fatoRowHtml(r) {
-  const esc = (v) => String(v ?? "").replace(/"/g, "&quot;");
-  return `<div class="fato-padrao-row">
-    <input type="hidden" data-field="id"    value="${esc(r.id || "")}" />
-    <input type="text"   data-field="tipo"  value="${esc(r.tipo)}" placeholder="Tipo (ex: Ancestralidade, Classe...)" class="col-tipo" />
-    <label class="col-obrig">
-      <input type="checkbox" data-field="obrigatorio" ${r.obrigatorio ? "checked" : ""} /> Obrigatório
-    </label>
-    <button type="button" class="btn-remove-row" data-action="removeFatoPadrao" title="Remover">×</button>
-  </div>`;
-}

@@ -1,0 +1,9 @@
+<div class="reserva-row">
+  <input type="hidden" data-field="id"           value="{{r.id}}" />
+  <input type="text"   data-field="nome"         value="{{r.nome}}"                  placeholder="{{localize 'FRACTAL.Config.ColNome'}}"         class="col-nome" />
+  <input type="number" data-field="vinicial"     value="{{r.valor_inicial}}"          min="1" max="6"                                               class="col-num"  />
+  <input type="number" data-field="vmax"         value="{{r.valor_maximo_permitido}}" min="1" max="10"                                              class="col-num"  />
+  <input type="text"   data-field="gatilho"      value="{{r.gatilho}}"               placeholder="{{localize 'FRACTAL.Config.ColGatilho'}}"      class="col-texto"/>
+  <input type="text"   data-field="consequencia" value="{{r.consequencia}}"           placeholder="{{localize 'FRACTAL.Config.ColConsequencia'}}" class="col-texto"/>
+  <button type="button" class="btn-remove-row" data-action="removeReserva" title="{{localize 'FRACTAL.Comum.Remover'}}">×</button>
+</div>

@@ -4,6 +4,7 @@ import { GrupoData } from "./data/actor-grupo.mjs";
 import { FatoItemData } from "./data/item-fato.mjs";
 import { registerSheets } from "./helpers/sheet-registration.mjs";
 import { registerSettings, injectCustomCSS, applyAccentColor } from "./settings/register.mjs";
+import { CONFIG_PARTIALS } from "./settings/reservas-config-app.mjs";
 import { setupMacros } from "./helpers/macros.mjs";
 import { clockPanel } from "./helpers/clock-panel.mjs";
 
@@ -17,6 +18,7 @@ Hooks.once("init", () => {
 
   registerSettings();
   registerSheets();
+  foundry.applications.handlebars.loadTemplates(CONFIG_PARTIALS);
 
   Handlebars.registerHelper("times", (n, block) => {
     let result = "";
@@ -45,9 +47,11 @@ Hooks.once("ready", async () => {
   clockPanel.render();
 });
 
-Hooks.on("updateActor", actor => {
-  if (["desafio", "grupo"].includes(actor.type)) clockPanel.render();
-});
+for (const hook of ["createActor", "updateActor", "deleteActor"]) {
+  Hooks.on(hook, actor => {
+    if (["desafio", "grupo"].includes(actor.type)) clockPanel.render();
+  });
+}
 
 Hooks.on("preCreateActor", (actor, data) => {
   if (data.img && data.img !== "icons/svg/mystery-man.svg") return;
